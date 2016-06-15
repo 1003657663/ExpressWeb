@@ -34,6 +34,37 @@ var SearchInput = React.createClass({
 /**
  * 左边商标
  */
+var LeftBrand = React.createClass({
+    render: function () {
+        return (
+            <div className="brand_container">
+                <div className="brandicon_container">
+                    <img src="../images/github-pure.png" className="brand_icon"/>
+                </div>
+                <p className="brand_name">快递吧</p>
+            </div>
+        );
+    }
+});
+
+/**
+ * 右边登录注册按钮
+ */
+var LoginAndReg = React.createClass({
+    handleLoginClick: function () {
+        ReactDOM.render(
+            <Login />,
+            document.body
+        );
+    },
+    render: function () {
+        return (
+            <div className="loginAndReg">
+                <a href="#" onClick={this.handleLoginClick.bind(this)}><span className="glyphicon glyphicon-user"></span>登录</a>
+            </div>
+        );
+    }
+});
 
 /**
  * 顶部导航栏
@@ -41,8 +72,10 @@ var SearchInput = React.createClass({
 var NavBar = React.createClass({
     render: function () {
         return (
-            <nav>
+            <nav className="nav_bar">
+                <LeftBrand />
                 <SearchInput/>
+                <LoginAndReg />
             </nav>
         );
     }

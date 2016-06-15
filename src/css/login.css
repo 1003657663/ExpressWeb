@@ -1,0 +1,8 @@
+.login_window{
+    width: 200px;
+    height: 200px;
+    -webkit-box-shadow: 0 0 5px 5px #aaaaaa;
+    -moz-box-shadow: 0 0 5px 5px #aaaaaa;
+    box-shadow: 0 0 5px 5px #aaaaaa;
+    display: none;
+}

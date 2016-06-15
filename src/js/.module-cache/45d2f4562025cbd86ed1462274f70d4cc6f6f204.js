@@ -37,45 +37,23 @@ var SearchInput = React.createClass({displayName: "SearchInput",
 var LeftBrand = React.createClass({displayName: "LeftBrand",
     render: function () {
         return (
-            React.createElement("div", {className: "brand_container"}, 
-                React.createElement("div", {className: "brandicon_container"}, 
-                    React.createElement("img", {src: "../images/github-pure.png", className: "brand_icon"})
+            React.createElement("div", null, 
+                React.createElement("div", null, 
+                    React.createElement("img", {src: "../images/brand.png"})
                 ), 
-                React.createElement("p", {className: "brand_name"}, "快递吧")
+                React.createElement("div", null)
             )
         );
     }
 });
-
-/**
- * 右边登录注册按钮
- */
-var LoginAndReg = React.createClass({displayName: "LoginAndReg",
-    handleLoginClick: function () {
-        ReactDOM.render(
-            React.createElement(Login, null),
-            document.body
-        );
-    },
-    render: function () {
-        return (
-            React.createElement("div", {className: "loginAndReg"}, 
-                React.createElement("a", {href: "#", onClick: this.handleLoginClick.bind(this)}, React.createElement("span", {className: "glyphicon glyphicon-user"}), "登录")
-            )
-        );
-    }
-});
-
 /**
  * 顶部导航栏
  */
 var NavBar = React.createClass({displayName: "NavBar",
     render: function () {
         return (
-            React.createElement("nav", {className: "nav_bar"}, 
-                React.createElement(LeftBrand, null), 
-                React.createElement(SearchInput, null), 
-                React.createElement(LoginAndReg, null)
+            React.createElement("nav", null, 
+                React.createElement(SearchInput, null)
             )
         );
     }

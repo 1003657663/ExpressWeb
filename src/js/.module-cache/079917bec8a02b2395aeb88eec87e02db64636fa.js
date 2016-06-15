@@ -54,13 +54,13 @@ var LoginAndReg = React.createClass({displayName: "LoginAndReg",
     handleLoginClick: function () {
         ReactDOM.render(
             React.createElement(Login, null),
-            document.body
+            document.getElementById("content")
         );
     },
     render: function () {
         return (
             React.createElement("div", {className: "loginAndReg"}, 
-                React.createElement("a", {href: "#", onClick: this.handleLoginClick.bind(this)}, React.createElement("span", {className: "glyphicon glyphicon-user"}), "登录")
+                React.createElement("a", {href: "#", onClick: this.handleLoginClick}, React.createElement("span", {className: "glyphicon glyphicon-user"}), "登录")
             )
         );
     }

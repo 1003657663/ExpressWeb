@@ -54,7 +54,7 @@ var LoginAndReg = React.createClass({displayName: "LoginAndReg",
     handleLoginClick: function () {
         ReactDOM.render(
             React.createElement(Login, null),
-            document.body
+            document.getElementById("content")
         );
     },
     render: function () {

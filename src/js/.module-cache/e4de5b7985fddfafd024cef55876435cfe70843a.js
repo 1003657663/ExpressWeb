@@ -51,16 +51,10 @@ var LeftBrand = React.createClass({displayName: "LeftBrand",
  * 右边登录注册按钮
  */
 var LoginAndReg = React.createClass({displayName: "LoginAndReg",
-    handleLoginClick: function () {
-        ReactDOM.render(
-            React.createElement(Login, null),
-            document.body
-        );
-    },
     render: function () {
         return (
             React.createElement("div", {className: "loginAndReg"}, 
-                React.createElement("a", {href: "#", onClick: this.handleLoginClick.bind(this)}, React.createElement("span", {className: "glyphicon glyphicon-user"}), "登录")
+                React.createElement("a", {href: "#"}, React.createElement("span", {className: "glyphicon glyphicon-user"}), "登录")
             )
         );
     }
