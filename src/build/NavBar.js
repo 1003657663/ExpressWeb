@@ -53,14 +53,17 @@ var LeftBrand = React.createClass({
 var LoginAndReg = React.createClass({
     handleLoginClick: function () {
         ReactDOM.render(
-            <Login />,
-            document.body
+            <Login isLogin="true" key="isLogin"/>,
+            document.getElementById("login_container")
         );
     },
     render: function () {
         return (
             <div className="loginAndReg">
-                <a href="#" onClick={this.handleLoginClick.bind(this)}><span className="glyphicon glyphicon-user"></span>登录</a>
+                <a href="#" onClick={this.handleLoginClick}>
+                    <span className="glyphicon glyphicon-user"></span>
+                    登录
+                </a>
             </div>
         );
     }

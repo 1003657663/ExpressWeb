@@ -1,8 +1,54 @@
 .login_window{
-    width: 200px;
-    height: 200px;
-    -webkit-box-shadow: 0 0 5px 5px #aaaaaa;
-    -moz-box-shadow: 0 0 5px 5px #aaaaaa;
-    box-shadow: 0 0 5px 5px #aaaaaa;
-    display: none;
+    width: 340px;
+    /*-webkit-box-shadow: 0 0 5px 5px #aaaaaa;
+    -moz-box-shadow: 0 0 5px 5px #aaaaaa;*/
+    box-shadow: 0 0 5px 3px #aaaaaa;
+    position: absolute;
+    left: 50%;
+    top:50%;
+    margin-top: -170px;
+    margin-left: -170px;
+    text-align: center;
+    padding: 30px;
+}
+
+.login_name,.login_password,.login_tel{
+    border:none;
+    border-bottom:1px #9c9c9c solid;
+    width:100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+.login_name:focus,.login_password:focus,.login_tel:focus{
+    outline:none;
+    border-bottom:1px #2aabd2 solid;
+}
+.login_submit{
+    margin:0 auto;
+    width: 100%;
+    height: 40px;
+    border:0;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background: #2aabd2;
+    color: #fff;
+}
+.login_submit:focus{
+    outline:none;
+}
+.login_submit:active{
+    background: #2793b7;
+}
+/*关闭按钮*/
+.login_close{
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 20px;
+    height: 20px;
 }
