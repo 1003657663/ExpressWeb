@@ -1,7 +1,7 @@
 /**
  * Created by songchao on 16/6/15.
  */
-$.support.cors = true;
+JQuery.support.cors = true;
 var User = {
     isLogin:false,
     name:"",

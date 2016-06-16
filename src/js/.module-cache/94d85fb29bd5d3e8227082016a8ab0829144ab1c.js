@@ -1,7 +1,13 @@
 /**
  * Created by songchao on 16/6/15.
  */
-$.support.cors = true;
+//---火狐跨域
+try {
+    netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
+} catch (e) {
+    alert("Permission UniversalBrowserRead denied.");
+}
+
 var User = {
     isLogin:false,
     name:"",
