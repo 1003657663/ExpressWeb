@@ -1,9 +1,108 @@
+/*蓝色的比较亮的颜色*/
+/*整体主要部件的背景颜色*/
 .main {
+  height: 100%;
   margin: 0 auto;
   width: 500px;
-  height: 500px;
+  padding-top: 50px;
+  background: #fafafa;
   -webkit-box-shadow: 0 0 10px 1px #9c9c9c;
   -moz-box-shadow: 0 0 10px 1px #9c9c9c;
   box-shadow: 0 0 10px 1px #9c9c9c;
-  margin-top: 90px;
+}
+.user_info {
+  text-align: center;
+}
+.user_icon {
+  margin: 0 auto;
+  width: 80px;
+  height: 80px;
+}
+.user_icon img {
+  width: 100%;
+  height: 100%;
+  -webkit-border-radius: 35px;
+  -moz-border-radius: 35px;
+  -ms-border-radius: 35px;
+  -o-border-radius: 35px;
+  border-radius: 35px;
+}
+.user_name {
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.first_button_container {
+  height: 120px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: #cccccc;
+}
+.send_express_button {
+  height: 100%;
+}
+.send_express_button .send_icon_container {
+  width: 70px;
+  height: 70px;
+  margin: auto;
+  text-align: center;
+  -webkit-border-radius: 35px;
+  -moz-border-radius: 35px;
+  -ms-border-radius: 35px;
+  -o-border-radius: 35px;
+  border-radius: 35px;
+  background: #2793b7;
+}
+.send_express_button .send_icon_container img {
+  width: 70px;
+  height: 70px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.send_express_button .send_express_text {
+  width: 100%;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.express_history_container {
+  height: 100%;
+}
+.express_history_container .express_history_icon_container {
+  width: 70px;
+  height: 70px;
+  margin: auto;
+  text-align: center;
+  -webkit-border-radius: 35px;
+  -moz-border-radius: 35px;
+  -ms-border-radius: 35px;
+  -o-border-radius: 35px;
+  border-radius: 35px;
+  background: #2793b7;
+}
+.express_history_container .express_history_icon_container img {
+  width: 70px;
+  height: 70px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.express_history_container .express_history_icon_container img {
+  width: 70px;
+  height: 70px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.express_history_container .express_history_text {
+  width: 100%;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }

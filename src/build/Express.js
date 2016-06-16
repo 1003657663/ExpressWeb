@@ -1,18 +1,12 @@
 /**
  * Created by songchao on 16/6/14.
  */
-/*var LoginContainer = React.createClass({
-    render: function () {
-        return (
-            <div classID="login_container"></div>
-        );
-    }
-});*/
 
 var Content = React.createClass({
     render: function () {
+        var conStyle = {height:"100%"};
         return (
-            <div>
+            <div style={conStyle}>
                 <NavBar/>
                 <Main/>
                 <Footer/>

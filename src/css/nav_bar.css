@@ -1,3 +1,5 @@
+/*蓝色的比较亮的颜色*/
+/*整体主要部件的背景颜色*/
 /*搜索框图标*/
 .searchIcon {
   position: absolute;
@@ -17,9 +19,6 @@
   padding-top: 0;
   padding-bottom: 0;
   padding-left: 30px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
   width: 100%;
 }
 .searchInput:focus {
@@ -67,8 +66,8 @@
   position: fixed;
   top: 0;
   left: 0;
-  -webkit-box-shadow: 0 2px 8px #aaaaaa;
-  -moz-box-shadow: 0 2px 8px #aaaaaa;
-  box-shadow: 0 2px 8px #aaaaaa;
-  background: #2793b7;
+  background: #fafafa;
+  -webkit-box-shadow: 0 0 5px 2px #aaaaaa;
+  -moz-box-shadow: 0 0 5px 2px #aaaaaa;
+  box-shadow: 0 0 5px 2px #aaaaaa;
 }

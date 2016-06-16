@@ -3,3 +3,5 @@
 open -a "Google Chrome" --args --disable-web-security
 ****组件删除
 用一个返回null的空组件替代
+
+*********左右两边添加,像中间一样的组件显示其它信心

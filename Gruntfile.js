@@ -23,16 +23,28 @@ module.exports = function (grunt) {
             }
         },
         watch: {
-            options: {
-                livereload: true
+            html:{
+                files:['src/html/*.html'],
+                options:{livereload:true}
             },
-            scripts: {
+            js:{
+                files:['src/js/*.js'],
+                options:{livereload:true}
+            },
+            lesscss: {
                 files: ['./src/css/less/*.less'],
                 tasks: ['less'],
                 options: {
                     spawn: false,
-                },
+                    livereload:true
+                }
             },
+            /*css:{
+                files:['src/css/!*.css'],
+                options:{
+                    livereload:true
+                }
+            }*/
         }
     });
     grunt.loadNpmTasks('grunt-contrib-less');

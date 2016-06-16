@@ -11,7 +11,7 @@
   list-style: none;
   display: table;
 }
-.footer li {
+.footer ul li {
   float: left;
   padding-left: 20px;
   padding-right: 20px;
