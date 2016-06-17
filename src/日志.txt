@@ -1,5 +1,0 @@
-****跨域问题
-通过命令行启动mac chrome：
-open -a "Google Chrome" --args --disable-web-security
-****组件删除
-用一个返回null的空组件替代
