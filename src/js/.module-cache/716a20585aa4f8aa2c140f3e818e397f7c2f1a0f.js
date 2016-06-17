@@ -4,7 +4,7 @@
 /**
  * 姓名组件
  */
-var NameLogin = React.createClass({
+var NameLogin = React.createClass({displayName: "NameLogin",
     getInitialState: function () {
         return {nameText:""}
     },
@@ -23,14 +23,14 @@ var NameLogin = React.createClass({
     },
     render: function () {
         return (
-            <input type="text" value={this.state.nameText} className="login_name" placeholder="姓名" onChange={this.handleNameChange}/>
+            React.createElement("input", {type: "text", value: this.state.nameText, className: "login_name", placeholder: "姓名", onChange: this.handleNameChange})
         );
     }
 });
 /**
  * 电话号组件
  */
-var Tel = React.createClass({
+var Tel = React.createClass({displayName: "Tel",
     getInitialState: function () {
         return {telephone:""};
     },
@@ -50,9 +50,9 @@ var Tel = React.createClass({
     },
     render: function () {
         return (
-            <div>
-                <input type="text" value={this.state.telephone} onChange={this.handleChange} placeholder="电话号" className="login_tel"/>
-            </div>
+            React.createElement("div", null, 
+                React.createElement("input", {type: "text", value: this.state.telephone, onChange: this.handleChange, placeholder: "电话号", className: "login_tel"})
+            )
         );
     }
 });
@@ -60,7 +60,7 @@ var Tel = React.createClass({
 /**
  * 密码组件
  */
-var Password = React.createClass({
+var Password = React.createClass({displayName: "Password",
     getInitialState: function () {
         return {password:""};
     },
@@ -72,9 +72,9 @@ var Password = React.createClass({
     },
     render: function () {
         return (
-            <div>
-                <input type="password" placeholder="密码" onChange={this.handleChange} value={this.state.password} className="login_password" />
-            </div>
+            React.createElement("div", null, 
+                React.createElement("input", {type: "password", placeholder: "密码", onChange: this.handleChange, value: this.state.password, className: "login_password"})
+            )
         );
     }
 });
@@ -82,7 +82,7 @@ var Password = React.createClass({
 /**
  * 关闭按钮
  */
-var CloseButton = React.createClass({
+var CloseButton = React.createClass({displayName: "CloseButton",
     getInitialState: function(){
         return {src:"../images/index/close.png"};
     },
@@ -99,7 +99,7 @@ var CloseButton = React.createClass({
     },
     render: function () {
         return (
-            <img className="login_close" onClick={this.handleClick} onMouseOver={this.handleMouseOve} onMouseOut={this.handleMouseOu} src={this.state.src}/>
+            React.createElement("img", {className: "login_close", onClick: this.handleClick, onMouseOver: this.handleMouseOve, onMouseOut: this.handleMouseOu, src: this.state.src})
         );
     }
 });
@@ -107,7 +107,7 @@ var CloseButton = React.createClass({
 /**
  * 空组件
  */
-var EmptyComponent = React.createClass({
+var EmptyComponent = React.createClass({displayName: "EmptyComponent",
     render: function () {
         return null;
     }
@@ -116,7 +116,7 @@ var EmptyComponent = React.createClass({
 /**
  * 登陆组件
  */
-var Login = React.createClass({
+var Login = React.createClass({displayName: "Login",
     getInitialState: function () {
         var temp;
         if(this.props.isLogin!=undefined && this.props.isLogin == "true") {
@@ -130,17 +130,8 @@ var Login = React.createClass({
         //这里开始登陆
         var userinfo = "{\"telephone\":\""+this.state.telephone+"\",\"password\":\""+this.state.password+"\"}";
         url = Url.header+"/REST/Domain/login";
-        $.ajax({
-            url:url,
-            dataType:"json",
-            type:"post",
-            data:userinfo,
-            success:function (data) {
-                console.info(data);
-            },
-            error:function (data) {
-                console.error(data);
-            }
+        $.post(url,userinfo,function (result) {
+            console.info(result);
         });
     },
     handleSubmitStart: function (event) {
@@ -148,7 +139,7 @@ var Login = React.createClass({
     },
     handleToRegister: function () {
         ReactDOM.render(
-            <Login isLogin="false" key="noLogin"/>,
+            React.createElement(Login, {isLogin: "false", key: "noLogin"}),
             document.getElementById("login_container")
         );
     },
@@ -159,7 +150,7 @@ var Login = React.createClass({
         this.setState({errorMessage:message});
     },
     onClose: function () {
-        ReactDOM.render(<EmptyComponent/>,document.getElementById("login_container"));
+        ReactDOM.render(React.createElement(EmptyComponent, null),document.getElementById("login_container"));
     },
     render: function () {
         var h3Style = {textAlign:"center",width:"100%",paddingBottom:"10px"};
@@ -169,19 +160,19 @@ var Login = React.createClass({
         if(this.state.isLogin){
             nameCom = undefined;
         }else{
-            nameCom = <NameLogin sendToParent={this.sendToParent} onError={this.handleError} />;
+            nameCom = React.createElement(NameLogin, {sendToParent: this.sendToParent, onError: this.handleError});
         }
         return (
-            <form onSubmit={this.handleSubmitStart} method="get" className="login_window">
-                <CloseButton onClose={this.onClose} />
-                <h3 style={h3Style}>登陆</h3>
-                <Tel sendToParent={this.sendToParent} onError={this.handleError}/>
-                {nameCom}
-                <Password sendToParent={this.sendToParent} onError={this.handleError}/>
-                <div><input type="submit" className="login_submit" onClick={this.handleSubmitClick} defaultValue="提交"/></div>
-                <p>还没有账号?<a href="#" onClick={this.handleToRegister} style={aStyle}>注册新账号</a></p>
-                <p style={errorStyle}>{this.state.errorMessage}</p>
-            </form>
+            React.createElement("form", {onSubmit: this.handleSubmitStart, method: "get", className: "login_window"}, 
+                React.createElement(CloseButton, {onClose: this.onClose}), 
+                React.createElement("h3", {style: h3Style}, "登陆"), 
+                React.createElement(Tel, {sendToParent: this.sendToParent, onError: this.handleError}), 
+                nameCom, 
+                React.createElement(Password, {sendToParent: this.sendToParent, onError: this.handleError}), 
+                React.createElement("div", null, React.createElement("input", {type: "submit", className: "login_submit", onClick: this.handleSubmitClick, defaultValue: "提交"})), 
+                React.createElement("p", null, "还没有账号?", React.createElement("a", {href: "#", onClick: this.handleToRegister, style: aStyle}, "注册新账号")), 
+                React.createElement("p", {style: errorStyle}, this.state.errorMessage)
+            )
         );
     }
 });

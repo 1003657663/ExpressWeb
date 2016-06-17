@@ -1,0 +1,63 @@
+/*蓝色的比较亮的颜色*/
+/*整体主要部件的背景颜色*/
+.login_window {
+  width: 340px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  text-align: center;
+  padding: 30px;
+  background: #fafafa;
+  -webkit-box-shadow: 0 0 5px 3px #aaaaaa;
+  -moz-box-shadow: 0 0 5px 3px #aaaaaa;
+  box-shadow: 0 0 5px 3px #aaaaaa;
+  margin-top: -170px;
+  margin-left: -170px;
+}
+.login_name,
+.login_password,
+.login_tel {
+  border: none;
+  border-bottom: 1px #9c9c9c solid;
+  width: 100%;
+  background: inherit;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.login_name:focus,
+.login_password:focus,
+.login_tel:focus {
+  outline: none;
+  border-bottom: 1px #2aabd2 solid;
+}
+.login_submit {
+  margin: 0 auto;
+  width: 100%;
+  height: 40px;
+  border: 0;
+  background: #2aabd2;
+  color: #fff;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
+.login_submit:focus {
+  outline: none;
+}
+.login_submit:active {
+  background: #2793b7;
+}
+/*关闭按钮*/
+.login_close {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 20px;
+  height: 20px;
+}

@@ -5,9 +5,7 @@ var CenterComponent = React.createClass({displayName: "CenterComponent",
     render: function () {
         return (
             React.createElement("div", {className: "center-component"}, 
-                React.Children.map(this.props.children,function (child) {
-                    return child;
-                }), ";"
+                React.Children.map(this.props.children), ";"
             )
         );
     }
