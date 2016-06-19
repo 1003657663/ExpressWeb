@@ -2,10 +2,13 @@
  * Created by songchao on 16/6/17.
  */
 
-var LeftComponent = React.createClass({displayName: "LeftComponent",
+/**
+ * 左边容器
+ */
+var Left = React.createClass({displayName: "Left",
     render: function () {
         return (
-            React.createElement("div", {className: "left-compnonent"})
+            React.createElement("div", {className: "hidden-xs col-sm-3 col-md-4 left-component"})
         );
     }
 });

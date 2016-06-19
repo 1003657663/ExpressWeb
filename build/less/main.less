@@ -1,0 +1,130 @@
+@import "static";
+
+.main {
+    position: relative;
+    margin: 0 auto;
+    padding-top: 50px;
+    background: @main-background;
+    .box-shadow(0, 0, 10px, 1px, #9c9c9c);
+}
+
+.user_info{
+    text-align: center;
+}
+
+.user_icon{
+    @size:80px;
+    margin:0 auto;
+    width: @size;
+    height: @size;
+    background: #bdbdbd;
+    .border-radio(@size*0.5);
+    img{
+        width: 100%;
+        height: 100%;
+        .border-radio(@size*0.5);
+    }
+}
+.user_name{
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    .padding-top-bottom(10px);
+}
+
+//-------------------按钮部分
+.first_button_container{
+    height: 120px;
+    border-bottom: 5px #a8de8d solid;
+}
+
+.second_button_container{
+    height: 120px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    border-bottom: 5px #ff6e6e solid;
+}
+
+.send_express_button{
+    height: 100%;
+    .padding-top-bottom(10px);
+    .send_icon_container{
+        width: 70px;
+        height: 70px;
+        margin:auto;
+        text-align: center;
+        .border-radio(35px);
+        background: @light-color;
+        img{
+            width: 70px;
+            height: 70px;
+            .padding-top-bottom(20px);
+            .padding-left-right(15px);
+        }
+    }
+    .send_express_text{
+        width: 100%;
+        text-align: center;
+        .padding-top-bottom(5px);
+    }
+}
+
+.express_history_container{
+    height: 100%;
+    .padding-top-bottom(10px);
+    .express_history_icon_container{
+        .send_express_button > .send_icon_container;
+        img{
+            width: 70px;
+            height: 70px;
+            .padding-left-right(15px);
+            .padding-top-bottom(15px);
+        }
+    }
+    .express_history_text{
+        .send_express_button > .send_express_text;
+    }
+}
+
+.address_button_container{
+    height: 100%;
+    .padding-top-bottom(10px);
+    .address_button_icon_container{
+        .send_express_button > .send_icon_container;
+        img{
+            width: 70px;
+            height: 70px;
+            .padding-left-right(15px);
+            .padding-top-bottom(15px);
+        }
+    }
+    .address_button_text{
+        .send_express_button > .send_express_text;
+    }
+}
+
+.myinfo_button_container{
+    height: 100%;
+    .padding-top-bottom(10px);
+    .myinfo_button_icon_container{
+        .send_express_button > .send_icon_container;
+        img{
+            width: 70px;
+            height: 70px;
+            .padding-left-right(15px);
+            .padding-top-bottom(15px);
+        }
+    }
+    .myinfo_button_text{
+        .send_express_button > .send_express_text;
+    }
+}
+
+
+
+.send_express_button:hover,.express_history_container:hover,
+.address_button_container:hover,.myinfo_button_container:hover{
+    background: #efefef;
+    cursor: pointer;
+}
+

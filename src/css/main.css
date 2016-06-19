@@ -1,8 +1,13 @@
 /*蓝色的比较亮的颜色*/
 /*整体主要部件的背景颜色*/
+/*阴影颜色*/
+/*背景渐变
+@start  渐变开始颜色
+@end  结束颜色
+*/
 .main {
+  position: relative;
   margin: 0 auto;
-  width: 500px;
   padding-top: 50px;
   background: #fafafa;
   -webkit-box-shadow: 0 0 10px 1px #9c9c9c;
@@ -16,15 +21,21 @@
   margin: 0 auto;
   width: 80px;
   height: 80px;
+  background: #bdbdbd;
+  -webkit-border-radius: 40px;
+  -moz-border-radius: 40px;
+  -ms-border-radius: 40px;
+  -o-border-radius: 40px;
+  border-radius: 40px;
 }
 .user_icon img {
   width: 100%;
   height: 100%;
-  -webkit-border-radius: 35px;
-  -moz-border-radius: 35px;
-  -ms-border-radius: 35px;
-  -o-border-radius: 35px;
-  border-radius: 35px;
+  -webkit-border-radius: 40px;
+  -moz-border-radius: 40px;
+  -ms-border-radius: 40px;
+  -o-border-radius: 40px;
+  border-radius: 40px;
 }
 .user_name {
   width: 100%;
@@ -35,7 +46,13 @@
 }
 .first_button_container {
   height: 120px;
-  background: #cccccc;
+  border-bottom: 5px #a8de8d solid;
+}
+.second_button_container {
+  height: 120px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  border-bottom: 5px #ff6e6e solid;
 }
 .send_express_button {
   height: 100%;
@@ -52,7 +69,7 @@
   -ms-border-radius: 35px;
   -o-border-radius: 35px;
   border-radius: 35px;
-  background: #2793b7;
+  background: #5eb8d6;
 }
 .send_express_button .send_icon_container img {
   width: 70px;
@@ -83,7 +100,7 @@
   -ms-border-radius: 35px;
   -o-border-radius: 35px;
   border-radius: 35px;
-  background: #2793b7;
+  background: #5eb8d6;
 }
 .express_history_container .express_history_icon_container img {
   width: 70px;
@@ -106,4 +123,89 @@
   text-align: center;
   padding-top: 5px;
   padding-bottom: 5px;
+}
+.address_button_container {
+  height: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.address_button_container .address_button_icon_container {
+  width: 70px;
+  height: 70px;
+  margin: auto;
+  text-align: center;
+  -webkit-border-radius: 35px;
+  -moz-border-radius: 35px;
+  -ms-border-radius: 35px;
+  -o-border-radius: 35px;
+  border-radius: 35px;
+  background: #5eb8d6;
+}
+.address_button_container .address_button_icon_container img {
+  width: 70px;
+  height: 70px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.address_button_container .address_button_icon_container img {
+  width: 70px;
+  height: 70px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.address_button_container .address_button_text {
+  width: 100%;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.myinfo_button_container {
+  height: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.myinfo_button_container .myinfo_button_icon_container {
+  width: 70px;
+  height: 70px;
+  margin: auto;
+  text-align: center;
+  -webkit-border-radius: 35px;
+  -moz-border-radius: 35px;
+  -ms-border-radius: 35px;
+  -o-border-radius: 35px;
+  border-radius: 35px;
+  background: #5eb8d6;
+}
+.myinfo_button_container .myinfo_button_icon_container img {
+  width: 70px;
+  height: 70px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.myinfo_button_container .myinfo_button_icon_container img {
+  width: 70px;
+  height: 70px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.myinfo_button_container .myinfo_button_text {
+  width: 100%;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.send_express_button:hover,
+.express_history_container:hover,
+.address_button_container:hover,
+.myinfo_button_container:hover {
+  background: #efefef;
+  cursor: pointer;
 }

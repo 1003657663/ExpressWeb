@@ -20,4 +20,4 @@ exec(cmd,{encoding:'utf-8'},function (error, stdout, stderr) {
 });*/
 
 
-//jsx --watch ./src/build ./src/js
+//jsx --watch ./build/js ./src/js

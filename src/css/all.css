@@ -1,3 +1,10 @@
+/*蓝色的比较亮的颜色*/
+/*整体主要部件的背景颜色*/
+/*阴影颜色*/
+/*背景渐变
+@start  渐变开始颜色
+@end  结束颜色
+*/
 body,
 html {
   margin: 0;
@@ -20,4 +27,70 @@ ul {
   height: 100%;
   padding-top: 90px;
   padding-bottom: 50px;
+}
+/*返回上一个界面按钮*/
+.before_button {
+  height: 40px;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.before_button img {
+  height: 40px;
+}
+/*进度圈圈*/
+.progress_container {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1001;
+  margin-left: -25px;
+}
+.progress_container img {
+  width: 50px;
+  height: 50px;
+  -webkit-animation: progress 1s infinite linear;
+  -o-animation: progress 1s infinite linear;
+  animation: progress 1s infinite linear;
+}
+@-webkit-keyframes progress {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes progress {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@-ms-keyframes progress {
+  0% {
+    -ms-transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+  }
+}
+@-moz-keyframes progress {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+/*float*/
+.float_left {
+  float: left;
+}
+.float_right {
+  float: right;
 }

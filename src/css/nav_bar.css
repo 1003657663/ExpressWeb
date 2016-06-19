@@ -1,5 +1,10 @@
 /*蓝色的比较亮的颜色*/
 /*整体主要部件的背景颜色*/
+/*阴影颜色*/
+/*背景渐变
+@start  渐变开始颜色
+@end  结束颜色
+*/
 /*搜索框图标*/
 .searchIcon {
   position: absolute;
@@ -46,7 +51,7 @@
   width: 50px;
   float: left;
 }
-.brand_icon {
+.brandicon_container .brand_icon {
   width: 50px;
   height: 50px;
 }
@@ -61,13 +66,34 @@
 .nav_bar {
   width: 100%;
   height: 50px;
-  padding-left: 100px;
-  padding-right: 100px;
   position: fixed;
+  z-index: 1000;
   top: 0;
   left: 0;
+  padding-left: 100px;
+  padding-right: 100px;
   background: #fafafa;
   -webkit-box-shadow: 0 0 5px 2px #aaaaaa;
   -moz-box-shadow: 0 0 5px 2px #aaaaaa;
   box-shadow: 0 0 5px 2px #aaaaaa;
+}
+/*屏幕小于750px时候改变某些样式以适应屏幕*/
+@media only screen and (max-width: 750px) {
+  .nav_bar {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .brandicon_container {
+    width: 24px;
+  }
+  .brandicon_container .brand_icon {
+    width: 24px;
+    height: 50px;
+    padding-top: 13px;
+    padding-bottom: 13px;
+  }
+  .brand_name {
+    font-size: 15px;
+    padding-left: 3px;
+  }
 }

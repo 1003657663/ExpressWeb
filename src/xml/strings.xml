@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--软件中所有的请求的urlhttp://192.168.1.125:8080-->
+    <string name="base_url">http://182.254.214.97:8080/ExTrace_Server</string>
+    <!--<string name="base_url">http://192.168.1.105:8080</string>-->
+
+    <string name="login_send">/REST/Domain/login</string>
+    <string name="register_send">/REST/Domain/register</string>
+    <string name="address_get_send">/REST/Misc/getSendAddress/customertel/{tel}</string><!--get方法，后面跟手机号-->
+    <string name="address_get_get">/REST/Misc/getAccAddress/customertel/{tel}</string><!--get方法，后面跟手机号-->
+    <string name="address_get_province">/REST/Misc/getAllProvince</string><!--获取全国省份-->
+    <string name="address_get_city">/REST/Misc/getCityList/</string><!--获取省份城市-->
+    <string name="address_get_region">/REST/Misc/getRegionList/</string><!--获取城市区域-->
+    <string name="address_submit_update">/REST/Misc/updateAddress</string><!--发货或者收货地址修改后提交地址-->
+    <string name="address_submit_new">/REST/Misc/newAddress</string><!--新增的收货或者发货地址-->
+    <string name="address_delete">/REST/Misc/deleteAddress/</string><!--删除地址url，后面加上用户id-->
+    <string name="user_change_tel">/REST/Domain/changeTel/old/{oldtel}/new/{newtel}</string><!--修改用户手机号url-->
+    <string name="user_change_password">/REST/Domain/changePwd/tel/{tel}/{pwdold}/{pwdnew}</string><!--修改用户密码-->
+
+    <string name="getExpressInfo_ByTel">/REST/Domain/getExpressInfoByTel/</string>
+    <string name="getExpressInfo_ById">/REST/Domain/getExpressInfoById/</string><!--根据快递单号查询快件-->
+    <string name="SendExpress">/REST/Domain/prepareSendExpress/customerId/{customerId}/sendAddressId/{sendAddressId}/recAddressId/{recAddressId}</string><!--新建快件-->
+    <string name="getExpressInfo_ByCustomerId">/REST/Domain/getExpressInfoByCustomerId/</string><!--根据customerID查询express list-->
+    <string name="getPackageInfo_ById">/REST/Domain/getPackageInfoById/</string><!--根据包裹单号查询包裹信息-->
+    <string name="searchPackageInPackage_ById">/REST/Domain/searchPackageInPackageById/</string><!--查询包裹中的包裹-->
+    <string name="searchExpressInPackage_ById">/REST/Domain/searchExpressInPackageById/</string>
+    <string name="createPackage">/REST/Domain/createPackage/</string>
+    <string name="transfee">运输费:</string>
+    <string name="weight">重量:</string>
+    <string name="insufee">保险费</string>
+    <string name="ID">快件单号</string>
+    <string name="send_address">收货地址</string>
+    <string name="receive_address">发货地址</string>
+    <string name="tel">电话</string>
+    <string name="password">密码</string>
+
+</resources>

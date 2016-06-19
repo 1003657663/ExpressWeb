@@ -5,7 +5,7 @@
 var Footer = React.createClass({displayName: "Footer",
     render: function () {
         return (
-            React.createElement("div", {className: "footer"}, 
+            React.createElement("div", {className: "row footer"}, 
                 React.createElement("ul", null, 
                     React.createElement("li", null, "关于我们"), 
                     React.createElement("li", null, "隐私")

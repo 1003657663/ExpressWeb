@@ -1,0 +1,29 @@
+/*蓝色的比较亮的颜色*/
+/*整体主要部件的背景颜色*/
+/*阴影颜色*/
+/*背景渐变
+@start  渐变开始颜色
+@end  结束颜色
+*/
+.address_container .address_head {
+  height: 30px;
+  background: #5eb8d6;
+  color: #FFFFFF;
+  line-height: 30px;
+  text-align: center;
+}
+.address_item {
+  padding-left: 10px;
+  padding-right: 10px;
+  border-bottom: 2px #d4d4d4 solid;
+}
+.address_item .address_info {
+  float: left;
+}
+.address_item .address_edit_button {
+  height: 30px;
+  float: right;
+}
+.address_item .address_edit_button img {
+  height: 30px;
+}

@@ -1,0 +1,93 @@
+@import "static.less";
+/*搜索框图标*/
+.searchIcon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-top: 7px;
+    padding-left: 10px;
+    width: 15px;
+    height: 15px;
+    .content-box();
+}
+
+.searchInput {
+    border: none;
+    height: 100%;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 30px;
+    width: 100%;
+}
+
+.searchInput:focus {
+    outline: none;
+}
+
+.searchForm {
+    width: 200px;
+    height: 30px;
+    padding: 2px;
+    border-radius: 5px;
+    border: #9c9c9c 1px solid;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -100px;
+    margin-top: -15px;
+}
+
+.loginAndReg {
+    float: right;
+    line-height: 50px;
+    font-size: 15px;
+}
+
+.brandicon_container {
+    height: 100%;
+    width: 50px;
+    float: left;
+    .brand_icon {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+.brand_name {
+    font-size: 25px;
+    font-weight: bold;
+    padding-left: 10px;
+    height: 100%;
+    line-height: 50px;
+    float: left;
+}
+
+.nav_bar {
+    width: 100%;
+    height: 50px;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    .padding-left-right(100px);
+    background: @main-background;
+    .box-shadow(0; 0; 5px; 2px; #aaaaaa);
+}
+/*屏幕小于750px时候改变某些样式以适应屏幕*/
+@media only screen and (max-width:750px) {
+    .nav_bar{
+        .padding-left-right(10px);
+    }
+    .brandicon_container {
+        width: 24px;
+        .brand_icon {
+            width: 24px;
+            height: 50px;
+            .padding-top-bottom(13px);
+        }
+    }
+    .brand_name {
+        font-size: 15px;
+        padding-left: 3px;
+    }
+}

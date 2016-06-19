@@ -1,0 +1,72 @@
+@light-color: #5eb8d6; /*蓝色的比较亮的颜色*/
+@main-background: #fafafa; /*整体主要部件的背景颜色*/
+@shadow-color: #aaaaaa;/*阴影颜色*/
+@small_dark_border_color:#d4d4d4;
+
+.border-radio(@rad:5px) {
+    -webkit-border-radius: @rad;
+    -moz-border-radius: @rad;
+    -ms-border-radius: @rad;
+    -o-border-radius: @rad;
+    border-radius: @rad;
+}
+
+.content-box() {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+.box-shadow() {
+    -webkit-box-shadow: 0,0,5px,2px,@shadow-color;
+    -moz-box-shadow: 0,0,5px,2px,@shadow-color;
+    box-shadow: 0,0,5px,2px,@shadow-color;
+}
+.box-shadow(@x:0; @y:0; @toLength:2px; @length:8px; @shadow-color:@shadow-color) {
+    -webkit-box-shadow: @arguments;
+    -moz-box-shadow: @arguments;
+    box-shadow: @arguments;
+}
+.box-shadow-inset(@x:0; @y:0; @toLength:2px; @length:8px; @shadow-color:@shadow-color){
+    -webkit-box-shadow: @arguments inset;
+    -moz-box-shadow: @arguments inset;
+    box-shadow: @arguments inset;
+}
+.padding-left-right(@length){
+    padding-left: @length;
+    padding-right: @length;
+}
+
+.padding-top-bottom(@length){
+    padding-top: @length;
+    padding-bottom: @length;
+}
+
+.margin-left-right(@length){
+    margin-left: @length;
+    margin-right: @length;
+}
+.margin-top-bottom(@length){
+    margin-top: @length;
+    margin-bottom: @length;
+}
+
+/*背景渐变
+@start  渐变开始颜色
+@end  结束颜色
+*/
+.bg(@start :#00ffff,@end :#9fffff){
+    background:-webkit-gradient(linear,0 0, 0 100%,from(@start),to(@end));
+    background:-moz-linear-gradient(top,@start ,@end);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=@start ,
+    endColorstr=@end ,grandientType=0);
+}
+
+.myanimation(@kfname;@time;@roundTime;@style){
+    -webkit-animation:@kfname @time @roundTime @style;
+    -o-animation:@kfname @time @roundTime @style;
+    animation:@kfname @time @roundTime @style;
+}
+
+
+
+

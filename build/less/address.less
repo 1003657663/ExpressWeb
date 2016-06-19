@@ -1,0 +1,26 @@
+@import "static";
+.address_container{
+    .address_head{
+        height: 30px;
+        background: @light-color;
+        color: #FFFFFF;
+        line-height: 30px;
+        text-align: center;
+    }
+}
+
+.address_item{
+    .padding-left-right(10px);
+    border-bottom: 2px @small_dark_border_color solid;
+    .address_info{
+        float:left;
+    }
+    .address_edit_button{
+        @height:30px;
+        height: @height;
+        float: right;
+        img{
+            height: @height;
+        }
+    }
+}

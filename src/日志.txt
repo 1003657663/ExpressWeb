@@ -5,3 +5,4 @@ open -a "Google Chrome" --args --disable-web-security
 用一个返回null的空组件替代
 
 *********左右两边添加,像中间一样的组件显示其它信心
+********中间部分使用渐变背景---待使用
