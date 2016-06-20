@@ -6,7 +6,7 @@
  */
 var SearchInput = React.createClass({displayName: "SearchInput",
     getInitialState: function () {
-        return {value:""};
+        return {value: ""};
     },
     handleClick: function () {
         //获取值
@@ -15,17 +15,19 @@ var SearchInput = React.createClass({displayName: "SearchInput",
     },
     handleInputChange: function (event) {
         var inputValue = event.target.value;
-        if(!isNaN(inputValue)){
-            this.setState({value:inputValue});
+        if (!isNaN(inputValue)) {
+            this.setState({value: inputValue});
         }
     },
     render: function () {
         return (
             React.createElement("form", {className: "searchForm", method: "get"}, 
                 React.createElement("span", null, 
-                    React.createElement("img", {src: "../images/searchIcon.png", width: "15px", height: "15px", className: "searchIcon", onClick: this.handleClick})
+                    React.createElement("img", {src: "../images/searchIcon.png", width: "15px", height: "15px", className: "searchIcon", 
+                         onClick: this.handleClick})
                 ), 
-                React.createElement("input", {type: "text", className: "searchInput", value: this.state.value, placeholder: "搜索", onChange: this.handleInputChange})
+                React.createElement("input", {type: "text", className: "searchInput", value: this.state.value, placeholder: "搜索", 
+                       onChange: this.handleInputChange})
             )
         );
     }
@@ -51,19 +53,38 @@ var LeftBrand = React.createClass({displayName: "LeftBrand",
  * 右边登录注册按钮
  */
 var LoginAndReg = React.createClass({displayName: "LoginAndReg",
+    getInitialState: function () {
+        User.NavBar = this;
+        return {isLogin: User.isLogin}
+    },
     handleLoginClick: function () {
         ReactDOM.render(
             React.createElement(Login, {isLogin: "true", key: "isLogin"}),
             document.getElementById("login_container")
         );
     },
+    handleLogout: function () {
+        //注销
+        User.logout();
+    },
     render: function () {
-        return (
-            React.createElement("div", {className: "loginAndReg"}, 
-                React.createElement("a", {href: "#", onClick: this.handleLoginClick}, 
+        var chil;
+        if (this.state.isLogin) {
+            chil = 
+                (React.createElement("a", {href: "#", onClick: this.handleLogout}, 
+                    React.createElement("span", {className: "glyphicon glyphicon-user"}), 
+                    "注销"
+                ));
+        } else {
+            chil = 
+                (React.createElement("a", {href: "#", onClick: this.handleLoginClick}, 
                     React.createElement("span", {className: "glyphicon glyphicon-user"}), 
                     "登录"
-                )
+                ));
+        }
+        return (
+            React.createElement("div", {className: "loginAndReg"}, 
+                chil
             )
         );
     }

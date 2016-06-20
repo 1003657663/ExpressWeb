@@ -34,7 +34,7 @@ var Tools = {
             }
         }
         var type = config[con[0]];
-        var url = config[con[1]];
+        var url = Url.header + config[con[1]];
         var data = config[con[2]];
         var success = config[con[3]];
         var error = config[con[4]];
@@ -54,12 +54,27 @@ var Tools = {
             data:JSON.stringify(data),
             dataType:'json',
             heanders: {
-                Accept: "application/x-www-form-urlencoded,application/json",
-                "Content-Type": "application/json",//"application/json",
-                "Access-Control-Request-Method":"POST"
+                Accept: "application/json",
+                "Content-Type": "application/x-www-form-urlencoded",//"application/json",
+                "Access-Control-Request-Method":type
             },
             success:success,
             error:error
         });
+    },
+    classSet: function () {
+        var result = "";
+        for(var i=0;i<arguments.length;i++){
+            if(typeof arguments[i] == "string"){
+                result += " "+arguments[i];
+            }
+            if(Array.isArray(arguments[i])){
+                var ary = arguments[i];
+                for(index in ary){
+                    result += " "+ary[index];
+                }
+            }
+        }
+        return result;
     }
 };

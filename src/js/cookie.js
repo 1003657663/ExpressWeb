@@ -2,7 +2,9 @@
  * 新增 获取 删除cookie
  */
 
-function addCookie(name,value,days,path){   /**添加设置cookie**/  
+function addCookie(name,value){   /**添加设置cookie**/
+    var days = 30;
+    var path = Url.header;
     var name = escape(name);  
     var value = escape(value);  
     var expires = new Date();  

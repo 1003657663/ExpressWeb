@@ -6,7 +6,7 @@
  */
 var SearchInput = React.createClass({
     getInitialState: function () {
-        return {value:""};
+        return {value: ""};
     },
     handleClick: function () {
         //获取值
@@ -15,17 +15,19 @@ var SearchInput = React.createClass({
     },
     handleInputChange: function (event) {
         var inputValue = event.target.value;
-        if(!isNaN(inputValue)){
-            this.setState({value:inputValue});
+        if (!isNaN(inputValue)) {
+            this.setState({value: inputValue});
         }
     },
     render: function () {
         return (
             <form className="searchForm" method="get">
                 <span>
-                    <img src="../images/searchIcon.png" width="15px" height="15px" className="searchIcon" onClick={this.handleClick} />
+                    <img src="../images/searchIcon.png" width="15px" height="15px" className="searchIcon"
+                         onClick={this.handleClick}/>
                 </span>
-                <input type="text" className="searchInput" value={this.state.value} placeholder="搜索" onChange={this.handleInputChange} />
+                <input type="text" className="searchInput" value={this.state.value} placeholder="搜索"
+                       onChange={this.handleInputChange}/>
             </form>
         );
     }
@@ -51,19 +53,38 @@ var LeftBrand = React.createClass({
  * 右边登录注册按钮
  */
 var LoginAndReg = React.createClass({
+    getInitialState: function () {
+        User.NavBar = this;
+        return {isLogin: User.isLogin}
+    },
     handleLoginClick: function () {
         ReactDOM.render(
             <Login isLogin="true" key="isLogin"/>,
             document.getElementById("login_container")
         );
     },
+    handleLogout: function () {
+        //注销
+        User.logout();
+    },
     render: function () {
-        return (
-            <div className="loginAndReg">
-                <a href="#" onClick={this.handleLoginClick}>
+        var chil;
+        if (this.state.isLogin) {
+            chil = 
+                (<a href="#" onClick={this.handleLogout}>
+                    <span className="glyphicon glyphicon-user"></span>
+                    注销
+                </a>);
+        } else {
+            chil = 
+                (<a href="#" onClick={this.handleLoginClick}>
                     <span className="glyphicon glyphicon-user"></span>
                     登录
-                </a>
+                </a>);
+        }
+        return (
+            <div className="loginAndReg">
+                {chil}
             </div>
         );
     }

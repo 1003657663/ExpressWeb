@@ -18,13 +18,6 @@ var CenterComponent = React.createClass({displayName: "CenterComponent",
 });
 
 var Content = React.createClass({displayName: "Content",
-    getInitialState: function () {
-        return null;
-    },
-    testClick: function () {
-        closeAllDialog();
-        $('#myModal2').modal('toggle');
-    },
     render: function () {
         var conStyle = {height: "100%"};
         return (

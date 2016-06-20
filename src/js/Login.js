@@ -15,9 +15,10 @@ var NameLogin = React.createClass({displayName: "NameLogin",
                 this.props.onError("姓名太长");
             }
         } else {
+            this.props.onError("");
             this.setState({nameText: value});
-            if (this.props.sendToParent != undefined) {
-                this.props.sendToParent({nameText: value});
+            if (this.props.hanleChange != undefined) {
+                this.props.hanleChange(value);
             }
         }
     },
@@ -38,10 +39,15 @@ var Tel = React.createClass({displayName: "Tel",
     handleChange: function (event) {
         var telNum = event.target.value;
         if (Tools.isNum(telNum)) {
-            if (this.props.sendToParent != undefined) {
-                this.props.sendToParent({telephone: telNum});
+            if (telNum.length > 11) {
+                this.props.onError("电话号长度11位");
+            } else {
+                this.props.onError("");
+                if (this.props.handleChange != undefined) {
+                    this.props.handleChange(telNum);
+                }
+                this.setState({telephone: telNum});
             }
-            this.setState({telephone: telNum});
         } else {
             if (this.props.onError != null) {
                 this.props.onError("电话号必须是数字");
@@ -67,10 +73,10 @@ var Password = React.createClass({displayName: "Password",
         return {password: ""};
     },
     handleChange: function (event) {
-        if (this.props.sendToParent != undefined) {
-            this.props.sendToParent({password: event.target.value});
+        if (this.props.handleChange != undefined) {
+            this.props.handleChange(event.target.value);
         }
-        this.setState({password: event.target.value})
+        this.setState({password: event.target.value});
     },
     render: function () {
         return (
@@ -128,16 +134,28 @@ var Login = React.createClass({displayName: "Login",
         } else {
             temp = {isLogin: false}
         }
-        return Tools.extend(temp, {errorMessage: "", isProgress: -1});
+        return Tools.extend(temp, {
+            telephone: "15038290935", password: "123456", name: "",
+            errorMessage: "", isProgress: -1
+        });
     },
     handleSubmitClick: function (event) {
         //这里开始登陆
+        var config = {
+            telephone: this.state.telephone,
+            password: this.state.password,
+            name: this.state.name
+        };
+        if (config.telephone.length != 11) {
+            this.handleError("电话号码长度错误");
+            return;
+        }
         setTimeout(function () {
-            if(this.state.isProgress == -1 && this.isMounted()){
-                this.setState({isProgress:true});
+            if (this.state.isProgress == -1 && this.isMounted()) {
+                this.setState({isProgress: true});
             }
-        }.bind(this),800);
-        startLogin(this);
+        }.bind(this), 800);
+        startLogin(this, config, this.state.isLogin, this.onSuccess);
     },
     handleSubmitStart: function (event) {
         event.preventDefault();
@@ -148,14 +166,28 @@ var Login = React.createClass({displayName: "Login",
             document.getElementById("login_container")
         );
     },
-    sendToParent: function (data) {
-        this.state = Tools.extend(this.state, data);
-    },
     handleError: function (message) {
         this.setState({errorMessage: message});
     },
     onClose: function () {
         ReactDOM.render(React.createElement(EmptyComponent, null), document.getElementById("login_container"));
+    },
+    onSuccess: function () {
+        ReactDOM.render(
+            React.createElement(Content, {update: true}),
+            document.getElementById("content")
+        );
+        this.onClose();
+    },
+    //回收参数
+    handleTelChange: function (telephone) {
+        this.setState({telephone: telephone});
+    },
+    handlePasswordChange: function (password) {
+        this.setState({password: password});
+    },
+    handleNameChange: function (name) {
+        this.setState({name: name});
     },
     render: function () {
         var h3Style = {textAlign: "center", width: "100%", paddingBottom: "10px"};
@@ -165,16 +197,16 @@ var Login = React.createClass({displayName: "Login",
         if (this.state.isLogin) {
             nameCom = undefined;
         } else {
-            nameCom = React.createElement(NameLogin, {sendToParent: this.sendToParent, onError: this.handleError});
+            nameCom = React.createElement(NameLogin, {hanleChange: this.handleNameChange, onError: this.handleError});
         }
         return (
             React.createElement("form", {onSubmit: this.handleSubmitStart, method: "get", className: "login_window"}, 
                 React.createElement(CloseButton, {onClose: this.onClose}), 
                 React.createElement("h3", {style: h3Style}, "登陆"), 
-                React.createElement(Tel, {sendToParent: this.sendToParent, onError: this.handleError}), 
+                React.createElement(Tel, {handleChange: this.handleTelChange, onError: this.handleError}), 
                 nameCom, 
-                React.createElement(Password, {sendToParent: this.sendToParent, onError: this.handleError}), 
-                React.createElement("div", null, React.createElement("input", {type: "submit", className: "login_submit", onClick: this.handleSubmitClick, defaultValue: "提交"})
+                React.createElement(Password, {handleChange: this.handlePasswordChange, onError: this.handleError}), 
+                React.createElement("div", null, React.createElement("input", {type: "button", className: "login_submit", onClick: this.handleSubmitClick, defaultValue: "提交"})
                 ), 
                 React.createElement("p", null, "还没有账号?", React.createElement("a", {href: "#", onClick: this.handleToRegister, style: aStyle}, "注册新账号")), 
                 React.createElement("p", {style: errorStyle}, this.state.errorMessage), 
@@ -184,37 +216,83 @@ var Login = React.createClass({displayName: "Login",
     }
 });
 
-function startLogin(props) {
-    url = Url.header + "/REST/Domain/login";
-    //url = Url.header +"/REST/Misc/getAllProvince/"+"R0xTMTExMTFaVDExMTExMTUyMQ%3D%3D";
-    //url = "http://localhost:8080/dingding/MyServlet";
+function startLogin(props, config, isLogin, onSuccess) {
+    if (isLogin) {
+        var url = "/REST/Domain/login";
 
-    Tools.myAjax({
-        type: "post",
-        url, url,
-        data: {telephone: "11111111111", password: "1"},
-        success: function (data) {
-            props.setState({isProgress: false});
-            if (data.loginstate == 'true') {
-                /*addCookie("username", data.name, 365, "/");
-                 addCookie("token", data.token, 365, "/");
-                 addCookie("state", "true", 365, "/");
-                 addCookie("tel", $("#username").val(), 365, "/");
-                 addCookie("id", data.id, 365, "/");*/
-                console.info("登陆成功");
-                showDialog("mydialog1","警告","登陆成功",true);
-            } else if (data.loginstate == 'null') {
+        Tools.myAjax({
+            type: "post",
+            url, url,
+            data: {telephone: config.telephone, password: config.password},
+            success: function (data) {
+                props.setState({isProgress: false});
+                if (data.loginstate == 'true') {
+                    addCookie("username", data.name);
+                    addCookie("token", data.token);
+                    addCookie("isLogin", "true");
+                    addCookie("tel", config.telephone);
+                    addCookie("id", data.id);
+                    showDialog("dialog", "恭喜", "登陆成功", true, onSuccess);
+
+                    doSuccess(data);
+
+                } else if (data.loginstate == "deny") {
+                    showDialog("dialog", "警告", "电话号码长度错误", true);
+                } else if (data.loginstate == 'null') {
+                    showDialog("dialog", "警告", "请填写完整登陆信息", true);
+                } else {
+                    showDialog("dialog", "警告", "登陆失败,请重试", true);
+                }
+            }.bind(props),
+            error: function (data) {
+
+                props.setState({isProgress: false});
                 console.error(data);
-                showDialog("mydialog1","警告","请填写完整登陆信息",true);
-            } else if (data.loginstate == 'false') {
+                showDialog("dialog", "警告", "登陆失败" + data.state, true);
+
+            }.bind(props)
+        });
+    } else {
+        var url = "/REST/Domain/register";
+
+        Tools.myAjax({
+            type: "post",
+            url, url,
+            data: {telephone: config.telephone, password: config.password, name: config.name},
+            success: function (data) {
+                props.setState({isProgress: false});
+                if (data.registerstate == 'true') {
+                    doSuccess(data);
+                    showDialog("dialog", "恭喜", "注册成功", true, onSuccess);
+                } else if (data.registerstate == 'deny') {
+                    showDialog("dialog", "警告", "手机号已经注册过,请登录");
+                } else if (data.registerstate == 'null') {
+                    showDialog("dialog", "警告", "请填写完整登陆信息", true);
+                } else {
+                    showDialog("dialog", "警告", "注册失败", true);
+                }
+            }.bind(props),
+            error: function (data) {
+                props.setState({isProgress: false});
                 console.error(data);
-                showDialog("mydialog1","警告","登陆失败",true);
-            }
-        }.bind(props),
-        error: function (data) {
-            props.setState({isProgress: false});
-            console.error(data);
-            showDialog("mydialog1","警告","登陆失败",true);
-        }.bind(props)
-    });
+                showDialog("dialog", "警告", "注册失败", true);
+            }.bind(props)
+        });
+    }
+
+    function doSuccess(data) {
+        var name = data.name;
+        if (data.name == undefined) {
+            name = config.name;
+        }
+        addCookie("username", name);
+        addCookie("token", data.token);
+        addCookie("isLogin", "true");
+        addCookie("telephone", config.telephone);
+        addCookie("password",config.password);
+        addCookie("id", data.id);
+
+        User.login(name, config.telephone, config.password, data.token, data.id);
+
+    }
 }
