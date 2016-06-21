@@ -10,7 +10,7 @@ var FillWidthP = React.createClass({displayName: "FillWidthP",
         var classes = Tools.classSet(
             'fill_width_margin_8',
             'width_all',
-            this.props.classNames
+            this.props.className
         );
         return (
             React.createElement("p", {className: classes, style: this.props.style}, 

@@ -8,11 +8,12 @@
  */
 var ExpressHistoryItem = React.createClass({displayName: "ExpressHistoryItem",
     propTypes: {
-        historyID: React.PropTypes.number,
-        historySendName: React.PropTypes.string,
-        historySendTime: React.PropTypes.string,
-        historyReceiveName: React.PropTypes.string,
-        historyReceiveTime: React.PropTypes.string,
+        /*getTime:React.PropTypes.string,
+         historyID: React.PropTypes.number,
+         historySendName: React.PropTypes.string,
+         historySendTime: React.PropTypes.string,
+         historyReceiveName: React.PropTypes.string,
+         historyReceiveTime: React.PropTypes.string,*/
         itemClick: React.PropTypes.func,
     },
     handleItemClick: function () {
@@ -21,22 +22,22 @@ var ExpressHistoryItem = React.createClass({displayName: "ExpressHistoryItem",
     render: function () {
         return (
             React.createElement("div", {className: "history_item", onClick: this.handleItemClick}, 
-                React.createElement("p", null, "单号:", this.props.historyID), 
+                React.createElement("p", null, "单号:", this.props.ID), 
                 React.createElement(FillWidthDiv, {classNames: ["display-table"]}, 
                     React.createElement("span", {className: "float_left"}, 
-                        "发件人:", this.props.historySendName
+                        "发件人:", this.props.sname
                     ), 
                     React.createElement("span", {className: "float_right"}, 
-                        "发件时间:", this.props.historySendTime
+                        "发件时间:", this.props.outTime == "null" || this.props.outTime == undefined ? "未揽收" : this.props.outTime
                     )
                 ), 
                 React.createElement("div", {className: "clearfix"}), 
                 React.createElement("div", {className: "fill_width_margin_5 display-table width_all"}, 
                     React.createElement("span", {className: "float_left"}, 
-                        "收件人:", this.props.historyReceiveName
+                        "收件人:", this.props.rname
                     ), 
                     React.createElement("span", {className: "float_right"}, 
-                        "收件时间:", this.props.historyReceiveTime
+                        "收件时间:", this.props.getTime == "null" || this.props.getTime == undefined ? "未签收" : this.props.getTime
                     )
                 ), 
                 React.createElement("div", {className: "clearfix"})
@@ -54,6 +55,7 @@ var HistoryContainer = React.createClass({displayName: "HistoryContainer",
         isSend: React.PropTypes.bool,
         headText: React.PropTypes.string,
         historyList: React.PropTypes.array,
+        itemClick: React.PropTypes.func,
     },
     getInitialState: function () {
         var config = {};
@@ -64,19 +66,19 @@ var HistoryContainer = React.createClass({displayName: "HistoryContainer",
         return config;
     },
     render: function () {
+        var style = {marginLeft: "10px", marginRight: "10px"};
         return (
             React.createElement("div", {className: "row"}, 
                 React.createElement("p", {className: "address_head"}, this.props.headText), 
+                this.props.historyList.length == 0 ?
+                    (React.createElement(FillWidthP, {style: style}, "无", this.props.headText)) : "", 
+                
                 this.props.historyList.map(function (history, index) {
                     return (
                         React.createElement(ExpressHistoryItem, React.__spread({
                             key: "historyitem"+index}, 
-                            this.props, 
-                            {historyID: history.historyID, 
-                            historySendName: history.historySendName, 
-                            historySendTime: history.historySendTime, 
-                            historyReceiveName: history.historyReceiveName, 
-                            historyReceiveTime: history.historyReceiveTime
+                            history, 
+                            {itemClick: this.props.itemClick
                         })
                         )
                     )
@@ -90,27 +92,41 @@ var HistoryContainer = React.createClass({displayName: "HistoryContainer",
  * 历史详情页面
  */
 var HistoryDetail = React.createClass({displayName: "HistoryDetail",
-    propTypes: {
-        historyID: React.PropTypes.number,
-        historySendName: React.PropTypes.string,
-        historySendTime: React.PropTypes.string,
-        historyReceiveName: React.PropTypes.string,
-        historyReceiveTime: React.PropTypes.string,
-    },
     render: function () {
         return (
             React.createElement("div", null, 
                 React.createElement(FillWidthP, null, 
-                    "姓名:宋超"
+                    "快递单号:", this.props.ID
                 ), 
                 React.createElement(FillWidthP, null, 
-                    "电话:15038290935"
+                    "收件人:", this.props.rname
                 ), 
                 React.createElement(FillWidthP, null, 
-                    "地址:是考虑到机房里肯定是敬爱放"
+                    "收件人电话:", this.props.rtel
                 ), 
                 React.createElement(FillWidthP, null, 
-                    "时间:2019-05-02"
+                    "收件人地址:", this.props.radd
+                ), 
+                React.createElement(FillWidthP, null, 
+                    "签收时间:", this.props.getTime == "null" || this.props.getTime == undefined ? "未签收" : this.props.getTime
+                ), 
+                React.createElement(FillWidthP, null, 
+                    "发件人姓名:", this.props.sname
+                ), 
+                React.createElement(FillWidthP, null, 
+                    "发件人电话号:", this.props.stel
+                ), 
+                React.createElement(FillWidthP, null, 
+                    "发件人地址:", this.props.sadd
+                ), 
+                React.createElement(FillWidthP, null, 
+                    "发件时间:", this.props.outTime == "null" || this.props.outTime == undefined ? "未揽收" : this.props.outTime
+                ), 
+                React.createElement(FillWidthP, null, 
+                    "快件重量:", this.props.weight + "Kg"
+                ), 
+                React.createElement(FillWidthP, null, 
+                    "费用:", this.props.tranFee + "元"
                 )
             )
         )
@@ -128,7 +144,7 @@ var ExpressHistotyComponent = React.createClass({displayName: "ExpressHistotyCom
             isProgress: -1,
             historyReceiveList: [],
             historySendList: [],
-            child: getHistoryComponentChild(this,[],[]),
+            child: gethistoryComponentChild(this, [], []),
         }
     },
     componentDidMount: function () {
@@ -137,33 +153,51 @@ var ExpressHistotyComponent = React.createClass({displayName: "ExpressHistotyCom
                 this.setState({isProgress: true});
             }
         }.bind(this), 800);
-        //-------test---
-        var list = Test.historyList;
+        //获取收件记录
+        var sendOK = false;
+        var receiveOk = false;
         Tools.myAjax({
             type: "get",
-            url: "http://www.baidu.com",
-            success: function () {
-                if (this.isMounted()) {
-                    this.setState({isProgress: false});
+            url: "/REST/Domain/getRercvExpressInfoByCustomerId/" + User.id,
+            success: function (data) {
+                receiveOk = true;
+                this.state.historyReceiveList = data;
+                if (sendOK && this.isMounted()) {
                     this.setState({
-                        child: getHistoryComponentChild(this,list,list)
+                        isProgress: false,
+                        child: gethistoryComponentChild(this, this.state.historyReceiveList, this.state.historySendList)
+                    });
+                }
+            }.bind(this),
+            error: function (data) {
+                console.error(data);
+                showDialog("dialog", "警告", "获取历史收件数据出错", true);
+            }.bind(this)
+        });
+        //获取发件记录
+        Tools.myAjax({
+            type: "get",
+            url: "/REST/Domain/getSendExpressInfoByCustomerId/" + User.id,
+            success: function (data) {
+                sendOK = true;
+                this.state.historySendList = data;
+                if (receiveOk && this.isMounted()) {
+                    this.setState({
+                        isProgress: false,
+                        child: gethistoryComponentChild(this, this.state.historyReceiveList, this.state.historySendList)
                     });
                 }
             }.bind(this),
             error: function () {
-                if (this.isMounted()) {
-                    this.setState({
-                        isProgress: false,
-                        child:getHistoryComponentChild(this,list,list),
-                    });
-                }
+                console.error(data);
+                showDialog("dialog", "警告", "获取历史发件数据出错", true);
             }.bind(this)
         });
     },
-    handleHistoryItemClick: function (props) {
+    handleHistoryItemClick: function (pro) {
         this.setState({
-            child:[
-                React.createElement(HistoryDetail, React.__spread({key: "historydetail"},  props))
+            child: [
+                React.createElement(HistoryDetail, React.__spread({key: "historydetail"},  pro))
             ]
         });
     },
@@ -179,15 +213,15 @@ var ExpressHistotyComponent = React.createClass({displayName: "ExpressHistotyCom
 
 /**
  * 返回历史记录的容器元素,通过给定参数,传入list
- * @param thi
+ * @param the
  * @param historyReceiveList
  * @param historySendList
  * @returns {XML[]}
  */
-function getHistoryComponentChild(thi, historyReceiveList, historySendList) {
+function gethistoryComponentChild(the, historyReceiveList, historySendList) {
     return [
         React.createElement(HistoryContainer, {
-            itemClick: thi.handleHistoryItemClick, 
+            itemClick: the.handleHistoryItemClick, 
             historyList: historyReceiveList, 
             headText: "收件历史", 
             isSend: false, 
@@ -195,7 +229,7 @@ function getHistoryComponentChild(thi, historyReceiveList, historySendList) {
         ),
 
         React.createElement(HistoryContainer, {
-            itemClick: thi.handleHistoryItemClick, 
+            itemClick: the.handleHistoryItemClick, 
             historyList: historySendList, 
             headText: "发件历史", 
             isSend: true, 
