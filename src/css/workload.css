@@ -1,0 +1,24 @@
+/*蓝色的比较亮的颜色*/
+/*整体主要部件的背景颜色*/
+/*阴影颜色*/
+/*背景渐变
+@start  渐变开始颜色
+@end  结束颜色
+*/
+.workload_canvas {
+  position: absolute;
+  top: 15%;
+  left: 10%;
+  width: 80%;
+  height: 70%;
+  -webkit-box-shadow: 0 0 5px 5px #888;
+  -moz-box-shadow: 0 0 5px 5px #888;
+  box-shadow: 0 0 5px 5px #888;
+}
+#workload_toast {
+  display: none;
+  position: absolute;
+  z-index: 1000;
+  padding: 5px;
+  background: red;
+}

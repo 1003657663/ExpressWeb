@@ -79,6 +79,23 @@
   padding-left: 15px;
   padding-right: 15px;
 }
+.send_express_button .package_in_icon_container {
+  width: 70px;
+  height: 70px;
+  margin: auto;
+  text-align: center;
+  -webkit-border-radius: 35px;
+  -moz-border-radius: 35px;
+  -ms-border-radius: 35px;
+  -o-border-radius: 35px;
+  border-radius: 35px;
+  background: #5eb8d6;
+}
+.send_express_button .package_in_icon_container img {
+  width: 70px;
+  height: 70px;
+  padding: 15px;
+}
 .send_express_button .send_express_text {
   width: 100%;
   text-align: center;

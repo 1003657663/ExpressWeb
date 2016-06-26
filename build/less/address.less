@@ -1,25 +1,24 @@
 @import "static";
 
-.address_container {
-    .address_head {
-        height: 30px;
-        background: @light-color;
-        .margin-top-bottom(0);
-        color: #FFFFFF;
-        line-height: 30px;
-        text-align: center;
-        .address_add_img {
-            height: 100%;
-            float: right;
-            padding: 3px;
-            margin-right: 5px;
-        }
-        .address_add_img:hover{
-            cursor: pointer;
-        }
+.address_head {
+    height: 30px;
+    background: @light-color;
+    position: relative;
+    .margin-top-bottom(0);
+    color: #FFFFFF;
+    line-height: 30px;
+    text-align: center;
+    .address_add_img {
+        height: 100%;
+        position: absolute;
+        top:0;
+        right:5px;
+        padding: 3px;
+    }
+    .address_add_img:hover{
+        cursor: pointer;
     }
 }
-
 .address_user_name {
     padding-right: 10px;
 }
@@ -48,6 +47,10 @@
             height: @height;
         }
     }
+}
+.address_item_on:hover{
+    background:#f1f1f1;
+    cursor: pointer;
 }
 
 .history_item:hover {

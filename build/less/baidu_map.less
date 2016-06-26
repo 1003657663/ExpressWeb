@@ -1,0 +1,38 @@
+@import "static";
+html, body {
+    height: 100%;
+}
+
+.baidu_map {
+    position: absolute;
+    top: 15%;
+    left:10%;
+    width: 80%;
+    height: 70%;
+    .box-shadow(0,0,5px,5px,#888);
+    -webkit-transform: scale(0, 0);
+    -moz-transform: scale(0, 0);
+    -ms-transform: scale(0, 0);
+    -o-transform: scale(0, 0);
+    transform: scale(0, 0);
+
+    -webkit-transition: all 1s cubic-bezier(0.870, -0.360, 0.595, 1.605) 0s;
+    -moz-transition: all 1s cubic-bezier(0.870, -0.360, 0.595, 1.605) 0s;
+    -ms-transition: all 1s cubic-bezier(0.870, -0.360, 0.595, 1.605) 0s;
+    -o-transition: all 1s cubic-bezier(0.870, -0.360, 0.595, 1.605) 0s;
+    transition: all 1s cubic-bezier(0.870, -0.360, 0.595, 1.605) 0s;
+}
+
+.baidu_map_on {
+    transform: scale(1, 1);
+}
+
+.baidu_map_close{
+    position: absolute;
+    display: table;
+    left: 50%;
+    bottom: 20%;
+    @height:40px;
+    width: @height;
+    margin-left:(@height*-0.5);
+}

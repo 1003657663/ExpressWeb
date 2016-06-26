@@ -1,0 +1,24 @@
+/*蓝色的比较亮的颜色*/
+/*整体主要部件的背景颜色*/
+/*阴影颜色*/
+/*背景渐变
+@start  渐变开始颜色
+@end  结束颜色
+*/
+.small_head_title {
+  margin: 0 auto;
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  border: 0;
+  background: #5eb8d6;
+  color: #fff;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}

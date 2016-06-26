@@ -5,22 +5,24 @@
 @start  渐变开始颜色
 @end  结束颜色
 */
-.address_container .address_head {
+.address_head {
   height: 30px;
   background: #5eb8d6;
+  position: relative;
   margin-top: 0;
   margin-bottom: 0;
   color: #FFFFFF;
   line-height: 30px;
   text-align: center;
 }
-.address_container .address_head .address_add_img {
+.address_head .address_add_img {
   height: 100%;
-  float: right;
+  position: absolute;
+  top: 0;
+  right: 5px;
   padding: 3px;
-  margin-right: 5px;
 }
-.address_container .address_head .address_add_img:hover {
+.address_head .address_add_img:hover {
   cursor: pointer;
 }
 .address_user_name {
@@ -56,6 +58,10 @@
 .address_item .address_edit_button img,
 .history_item .address_edit_button img {
   height: 30px;
+}
+.address_item_on:hover {
+  background: #f1f1f1;
+  cursor: pointer;
 }
 .history_item:hover {
   cursor: pointer;

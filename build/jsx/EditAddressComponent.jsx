@@ -228,6 +228,8 @@ var EditAddressComponent = React.createClass({
                 }
                 <input key="input4" type="button" onClick={this.handleSubmitClick} className="login_submit" value="提交"/>
                 <FillWidthP key="p2" style={pStyle}>{this.state.errorMessage}</FillWidthP>
+
+                <BeforeButton onCloseClick={this.props.onEditClose} />
             </form>
         );
     }

@@ -8,7 +8,8 @@
 var Left = React.createClass({
     render: function () {
         return (
-            <div className="hidden-xs col-sm-3 col-md-4 left-component"></div>
+            <div className="hidden-xs col-sm-3 col-md-4 left-component">
+            </div>
         );
     }
 });

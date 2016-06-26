@@ -14,6 +14,8 @@ var User = {
     UserInfo:"",
     //Navbar
     NavBar:"",
+    //Main
+    Main:"",
 
     cookieLogin:function () {
         this.isLogin = JSON.parse(getCookieValue("isLogin"));

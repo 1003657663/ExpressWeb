@@ -227,7 +227,9 @@ var EditAddressComponent = React.createClass({displayName: "EditAddressComponent
                     ), 
                 
                 React.createElement("input", {key: "input4", type: "button", onClick: this.handleSubmitClick, className: "login_submit", value: "提交"}), 
-                React.createElement(FillWidthP, {key: "p2", style: pStyle}, this.state.errorMessage)
+                React.createElement(FillWidthP, {key: "p2", style: pStyle}, this.state.errorMessage), 
+
+                React.createElement(BeforeButton, {onCloseClick: this.props.onEditClose})
             )
         );
     }

@@ -1,0 +1,37 @@
+@import "static";
+.workload_canvas {
+    position: absolute;
+    top: 15%;
+    left: 10%;
+    width: 80%;
+    height: 70%;
+    background: #FFFFFF;
+    .box-shadow(0, 0, 5px, 5px, #888);
+
+    -webkit-transform: scale(0, 0);
+    -moz-transform: scale(0, 0);
+    -ms-transform: scale(0, 0);
+    -o-transform: scale(0, 0);
+    transform: scale(0, 0);
+
+    -webkit-transition: all 1s cubic-bezier(0.870, -0.360, 0.595, 1.605) 0s;
+    -moz-transition: all 1s cubic-bezier(0.870, -0.360, 0.595, 1.605) 0s;
+    -ms-transition: all 1s cubic-bezier(0.870, -0.360, 0.595, 1.605) 0s;
+    -o-transition: all 1s cubic-bezier(0.870, -0.360, 0.595, 1.605) 0s;
+    transition: all 1s cubic-bezier(0.870, -0.360, 0.595, 1.605) 0s;
+}
+
+.workload_canvas_on{
+    transform: scale(1, 1);
+}
+
+#workload_toast {
+    display: none;
+    position: absolute;
+    z-index: 1000;
+    padding: 8px;
+    background: #000;
+    opacity: 0.5;
+    color: #FFFFFF;
+    .border-radio(5px);
+}

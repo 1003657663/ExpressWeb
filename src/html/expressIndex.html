@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>实时快递跟踪</title>
+    <link type="text/css" rel="stylesheet" href="../css/baidu_map.css">
     <!-- 新 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="../css/bootstrap/bootstrap.min.css">
 
     <!--自己的css-->
     <link type="text/css" rel="stylesheet" href="../css/all.css">
     <link type="text/css" rel="stylesheet" href="../css/centerComponent.css">
+    <link type="text/css" rel="stylesheet" href="../css/sendExpressComponent.css">
     <link type="text/css" rel="stylesheet" href="../css/nav_bar.css">
+    <link type="text/css" rel="stylesheet" href="../css/left.css">
     <link type="text/css" rel="stylesheet" href="../css/login.css">
     <link type="text/css" rel="stylesheet" href="../css/main.css">
     <link type="text/css" rel="stylesheet" href="../css/address.css">
@@ -33,11 +36,16 @@
 <div id="content"></div>
 <div id="login_container"></div>
 <div id="dialog"></div>
-
+<div class="baidu_map_container">
+    <div id="baidu_map" class="baidu_map">
+    </div>
+    <div class="baidu_map_close"></div>
+</div>
 <script src="../js/staticComponent.js"></script>
 <script src="../js/Dialog.js"></script>
 <script src="../js/BeforeButton.js"></script>
 <script src="../js/Login.js"></script>
+<script src="../js/SearchResult.js"></script>
 <script src="../js/NavBar.js"></script>
 <script src="../js/Footer.js"></script>
 <script src="../js/SendExpressComponent.js"></script>
@@ -45,6 +53,8 @@
 <script src="../js/EditAddressComponent.js"></script>
 <script src="../js/Address.js"></script>
 <script src="../js/ExpressHistory.js"></script>
+<script src="../js/ChangePassowrd.js"></script>
+<script src="../js/AboutOus.js"></script>
 <script src="../js/Main.js"></script>
 <script src="../js/LeftComponent.js"></script>
 <script src="../js/RightComponent.js"></script>
@@ -52,4 +62,6 @@
 <script src="../js/Express.js"></script>
 
 </body>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ynKpoQfTW9Zc93p4T4vWafHI6nFpIubO"></script>
+<script src="../js/baidu_map.js"></script>
 </html>

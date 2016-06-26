@@ -8,12 +8,6 @@
  */
 var ExpressHistoryItem = React.createClass({
     propTypes: {
-        /*getTime:React.PropTypes.string,
-         historyID: React.PropTypes.number,
-         historySendName: React.PropTypes.string,
-         historySendTime: React.PropTypes.string,
-         historyReceiveName: React.PropTypes.string,
-         historyReceiveTime: React.PropTypes.string,*/
         itemClick: React.PropTypes.func,
     },
     handleItemClick: function () {
@@ -147,6 +141,7 @@ var ExpressHistotyComponent = React.createClass({
             child: gethistoryComponentChild(this, [], []),
         }
     },
+
     componentDidMount: function () {
         setTimeout(function () {
             if (this.state.isProgress == -1 && this.isMounted()) {
@@ -201,11 +196,15 @@ var ExpressHistotyComponent = React.createClass({
             ]
         });
     },
+    handleCloseClick: function () {
+        this.props.onCloseClick([true]);
+    },
     render: function () {
         return (
             <div className="address_container">
                 {this.state.child}
                 {this.state.isProgress == true ? <Progress/> : ""}
+                <BeforeButton onCloseClick={this.handleCloseClick} key="beforebutton"/>
             </div>
         );
     }

@@ -21,3 +21,4 @@ exec(cmd,{encoding:'utf-8'},function (error, stdout, stderr) {
 
 
 //jsx --watch ./build/jsx -x jsx ./src/js
+//jsx --watch ./build/jsx/employee -x jsx ./src/js/employee

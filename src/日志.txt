@@ -9,3 +9,5 @@ open -a "Google Chrome" --args --disable-web-security
 
 
 *****签收时间,表示的字母没有确定
+
+*****如何分离员工和用户端

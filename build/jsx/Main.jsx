@@ -9,11 +9,11 @@ var UserInfo = React.createClass({
     getInitialState: function () {
         User.UserInfo = this;
         var info = {headimg: "../images/head.jpg"};
-        if(User.isLogin){
+        if (User.isLogin) {
             info.name = User.name;
             info.isLogin = User.isLogin;
-            info.telephone= User.telephone;
-        }else{
+            info.telephone = User.telephone;
+        } else {
             info.isLogin = User.isLogin;
         }
         return info;
@@ -42,11 +42,11 @@ var UserInfo = React.createClass({
                 </div>
                 <p className="user_name">
                     <a href="#" onClick={this.handlNoLoginClick}>
-                        {this.state.isLogin == true? this.state.name:"未登录"}
+                        {this.state.isLogin == true ? this.state.name : "未登录"}
                     </a>
                 </p>
                 <p className="user_tel">
-                    {this.state.isLogin == true? this.state.telephone: ""}
+                    {this.state.isLogin == true ? this.state.telephone : ""}
                 </p>
             </div>
         )
@@ -65,7 +65,7 @@ var SendExpressButton = React.createClass({
     },
     render: function () {
         return (
-            <div className="col-xs-6 send_express_button" onClick={this.props.sendExpressClick}>
+            <div className="col-xs-6 send_express_button" onClick={this.props.packageInClick}>
                 <div className="send_icon_container">
                     <img src="../images/main/send_express.png"/>
                 </div>
@@ -98,8 +98,8 @@ var ExpressHistoryButton = React.createClass({
  * Address查看或者修改按钮
  */
 var AddressButton = React.createClass({
-    propTypes:{
-        addressClick:React.PropTypes.func
+    propTypes: {
+        addressClick: React.PropTypes.func
     },
     render: function () {
         return (
@@ -114,16 +114,16 @@ var AddressButton = React.createClass({
 });
 
 /**
- * 个人信息
+ * 修改密码
  */
-var MyInfo = React.createClass({
+var ChangePasswordButton = React.createClass({
     render: function () {
         return (
-            <div className="col-xs-6 myinfo_button_container">
+            <div className="col-xs-6 myinfo_button_container" onClick={this.props.onPasswordClick}>
                 <div className="myinfo_button_icon_container">
-                    <img src="../images/main/express_history.png"/>
+                    <img src="../images/main/passwordbutton.png"/>
                 </div>
-                <div className="myinfo_button_text">地址管理</div>
+                <div className="myinfo_button_text">修改密码</div>
             </div>
         );
     }
@@ -140,12 +140,12 @@ var ButtonContainer = React.createClass({
         return (
             <div className="button-container">
                 <div className="row first_button_container">
-                    <SendExpressButton sendExpressClick={this.props.sendExpressClick}/>
+                    <SendExpressButton sendExpressClick={this.props.packageInClick}/>
                     <ExpressHistoryButton expressHistoryClick={this.props.expressHistoryClick}/>
                 </div>
                 <div className="row second_button_container">
                     <AddressButton addressClick={this.props.addressClick}/>
-                    <MyInfo />
+                    <ChangePasswordButton onPasswordClick={this.props.onPasswordClick} />
                 </div>
             </div>
         );
@@ -156,78 +156,97 @@ var ButtonContainer = React.createClass({
  * 页面中间的主要内容
  */
 var Main = React.createClass({
-    onCloseClick: function () {
+    onCloseClick: function (child) {
         //关闭按钮被点击处理
-        this.setState({
-            child: [
-                <UserInfo key="userinfo"/>,
-                <ButtonContainer
-                    key="buttoncontainer"
-                    sendExpressClick={this.handleSendExpressClick}
-                    expressHistoryClick={this.handlerExpressHistoryClick}
-                    addressClick={this.handleAddressClick}
-                />,
-            ]
-        })
-    },
-    handleSendExpressClick: function () {
-        if(!User.isLogin){
-            showDialog("dialog","警告","登录后才能寄快递",true);
+        if (child[0] == true) {
+            this.setState({
+                child: [
+                    <UserInfo key="userinfo"/>,
+                    <ButtonContainer
+                        key="buttoncontainer"
+                        sendExpressClick={this.handlePackageInClick}
+                        expressHistoryClick={this.handlerPackageOutClick}
+                        addressClick={this.handleAddressClick}
+                        onPasswordClick={this.handlePasswordClick}
+                    />
+                ]
+            });
+        } else {
+            this.setState({
+                child: child
+            });
+        }
+    }
+    ,
+    handlePackageInClick: function () {
+        if (!User.isLogin) {
+            showDialog("dialog", "警告", "登录后才能寄快递", true);
             return;
         }
+
         this.setState({
             child: [
                 <UserInfo key="userinfo"/>,
-                <Address key="sendexpress"/>,
-                <BeforeButton onCloseClick={this.onCloseClick} key="beforebutton"/>
+                <Address key="sendexpress" onCloseClick={this.onCloseClick} isSendExpress={true}/>,
             ]
         });
-    },
-    handlerExpressHistoryClick: function () {
-        if(!User.isLogin){
-            showDialog("dialog","警告","登录后查看历史记录",true);
+    }
+    ,
+    handlerPackageOutClick: function () {
+        if (!User.isLogin) {
+            showDialog("dialog", "警告", "登录后查看历史记录", true);
             return;
         }
         this.setState({
             child: [
                 <UserInfo key="userinfo"/>,
-                <ExpressHistotyComponent key="expresshistory"/>,
-                <BeforeButton onCloseClick={this.onCloseClick} key="beforebutton"/>
+                <ExpressHistotyComponent onCloseClick={this.onCloseClick} key="expresshistory"/>,
+            ]
+        })
+    }
+    ,
+    handleAddressClick: function () {
+        if (!User.isLogin) {
+            showDialog("dialog", "警告", "登录后才能管理地址", true);
+            return;
+        }
+        this.setState({
+            child: [
+                <UserInfo key="userinfo"/>,
+                <Address onCloseClick={this.onCloseClick} key="addressmanage"/>,
             ]
         })
     },
-    handleAddressClick: function () {
-        if(!User.isLogin){
-            showDialog("dialog","警告","登录后才能管理地址",true);
-            return;
-        }
+    handlePasswordClick: function () {
         this.setState({
-            child: [
-                <UserInfo key="userinfo"/>,
-                <Address key="addressmanage"/>,
-                <BeforeButton onCloseClick={this.onCloseClick} key="beforebutton"/>
+            child:[
+                <UserInfo key="userinfo" />,
+                <ChangePassword onCloseClick={this.onCloseClick}/>
             ]
         })
     },
     getInitialState: function () {
+        User.Main = this;
         var init = {
             child: [
                 <UserInfo key="userinfo"/>,
                 <ButtonContainer
                     key="buttoncontainer"
-                    sendExpressClick={this.handleSendExpressClick}
-                    expressHistoryClick={this.handlerExpressHistoryClick}
+                    sendExpressClick={this.handlePackageInClick}
+                    expressHistoryClick={this.handlerPackageOutClick}
                     addressClick={this.handleAddressClick}
+                    onPasswordClick={this.handlePasswordClick}
                 />,
             ]
         };
         return init;
-    },
+    }
+    ,
     render: function () {
         return (
             <div className="container col-sm-6 col-md-4 main">
                 {this.state.child}
-                <Footer key="footer"/>
+                <Footer onCloseClick={this.onCloseClick} key="footer"/>
             </div>
         );
     }

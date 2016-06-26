@@ -217,7 +217,7 @@ var Login = React.createClass({
 });
 
 function startLogin(props, config, isLogin, onSuccess) {
-    if (isLogin) {
+    if (isLogin) {//-------登陆
         var url = "/REST/Domain/login";
 
         Tools.myAjax({
@@ -227,14 +227,14 @@ function startLogin(props, config, isLogin, onSuccess) {
             success: function (data) {
                 props.setState({isProgress: false});
                 if (data.loginstate == 'true') {
-                    addCookie("username", data.name);
+                    /*addCookie("username", data.name);
                     addCookie("token", data.token);
                     addCookie("isLogin", "true");
                     addCookie("tel", config.telephone);
-                    addCookie("id", data.id);
-                    showDialog("dialog", "恭喜", "登陆成功", true, onSuccess);
+                    addCookie("id", data.id);*/
 
                     doSuccess(data);
+                    showDialog("dialog", "恭喜", "登陆成功", true, onSuccess);
 
                 } else if (data.loginstate == "deny") {
                     showDialog("dialog", "警告", "电话号码长度错误", true);
@@ -248,11 +248,11 @@ function startLogin(props, config, isLogin, onSuccess) {
 
                 props.setState({isProgress: false});
                 console.error(data);
-                showDialog("dialog", "警告", "登陆失败" + data.state, true);
+                showDialog("dialog", "警告", "登陆失败" + data.state(), true);
 
             }.bind(props)
         });
-    } else {
+    } else {//------注册
         var url = "/REST/Domain/register";
 
         Tools.myAjax({

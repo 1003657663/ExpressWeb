@@ -6,12 +6,35 @@
  */
 var SearchInput = React.createClass({
     getInitialState: function () {
-        return {value: ""};
+        return {value: "94694271472975"};
     },
     handleClick: function () {
-        //获取值
-        alert(this.state.value);
+        var id = this.state.value;
+        if (id.length < 11 || isNaN(id)) {
+            showDialog("dialog", "警告", "快递单号错误", true);
+            return;
+        }
         //----这里执行网络操作---ajax---
+        Tools.myAjax({
+            type: "get",
+            url: "/REST/Domain/getExpresslogisticsInfosByExpressId/" + this.state.value,
+            success: function (data) {
+                if (data.length == 0) {
+                    showDialog("dialog", "警告", "您查的快递号还没有物流信息",true);
+                    return;
+                }
+                                                      
+                User.Main.setState({
+                    child: [
+                        <UserInfo key="userinfo"/>,
+                        <SearchResult key="searchresult" searchID={id} searchResult={data} />,
+                    ]
+                });
+            },
+            error: function (data) {
+                console.error(data);
+            }
+        })
     },
     handleInputChange: function (event) {
         var inputValue = event.target.value;
@@ -19,9 +42,15 @@ var SearchInput = React.createClass({
             this.setState({value: inputValue});
         }
     },
+    onKeyDown: function (e) {
+        if (e.which == 13) {
+            this.handleClick();
+        }
+        e.preventDefault();
+    },
     render: function () {
         return (
-            <form className="searchForm" method="get">
+            <form className="searchForm" method="get" onKeyPress={this.onKeyDown}>
                 <span>
                     <img src="../images/searchIcon.png" width="15px" height="15px" className="searchIcon"
                          onClick={this.handleClick}/>
@@ -70,13 +99,13 @@ var LoginAndReg = React.createClass({
     render: function () {
         var chil;
         if (this.state.isLogin) {
-            chil = 
+            chil =
                 (<a href="#" onClick={this.handleLogout}>
                     <span className="glyphicon glyphicon-user"></span>
                     注销
                 </a>);
         } else {
-            chil = 
+            chil =
                 (<a href="#" onClick={this.handleLoginClick}>
                     <span className="glyphicon glyphicon-user"></span>
                     登录
