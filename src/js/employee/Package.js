@@ -14,25 +14,25 @@ var Package = React.createClass({displayName: "Package",
             expresses: [],
             addExpress: this.addExpress,
             width: "",
-            packageID:"",
+            packageID: "",
         }
     },
     addExpress: function (expressId) {//向界面和state中增加expressID
-        if(this.state.expresses.contains(expressId)){
-            showDialog("dialog","警告","这个快递已经在列表中",true);
+        if (this.state.expresses.contains(expressId)) {
+            showDialog("dialog", "警告", "这个快递已经在列表中", true);
             return;
         }
-        if(User.job == 1){//如果是快递员,那么包裹id是快递员自己的
-            if(User.recvPackageId!=null) {
-                addExpressToPackage(this,User.recvPackageId, expressId);
-            }else{
-                showDialog("dialog","警告","快递员收件包裹id是空,请重试",true);
+        if (User.job == 1) {//如果是快递员,那么包裹id是快递员自己的
+            if (User.recvPackageId != null) {
+                addExpressToPackage(this, User.recvPackageId, expressId);
+            } else {
+                showDialog("dialog", "警告", "快递员收件包裹id是空,请重试", true);
             }
-        }else {
-            if(this.state.packageID == ""){
-                showDialog("dialog","警告","包裹id是空,请重新填写包裹id",true);
-            }else {
-                addExpressToPackage(this,this.state.packageID, expressId);
+        } else {
+            if (this.state.packageID == "") {
+                showDialog("dialog", "警告", "包裹id是空,请重新填写包裹id", true);
+            } else {
+                addExpressToPackage(this, this.state.packageID, expressId);
             }
         }
     },
@@ -46,22 +46,22 @@ var Package = React.createClass({displayName: "Package",
         }, 10);
     },
     sureButtonGetPackageID: function () {
-        if(this.state.packageID!="") {//dialog点击确定后,获取包裹中的快递信息
-            getExpressFromPackage(this.state.packageID,this.getExpressListSuccess);
-        }else{
-            showDialog("dialog","警告","包裹id是空,请重新填写包裹id",true);
+        if (this.state.packageID != "") {//dialog点击确定后,获取包裹中的快递信息
+            getExpressFromPackage(this.state.packageID, this.getExpressListSuccess);
+        } else {
+            showDialog("dialog", "警告", "包裹id是空,请重新填写包裹id", true);
             this.onCloseClick();//包裹好是空的,那么返回重新填写包裹号
         }
     },
     getExpressListSuccess: function (data) {
         var expresses = this.state.expresses;
-        for(var i=0;i<data.length;i++){
+        for (var i = 0; i < data.length; i++) {
             expresses.push(data[i].ID);
         }
-        this.setState({expresses:expresses});
+        this.setState({expresses: expresses});
     },
     getPackageIDChange: function (e) {
-        if(e.target.value!="" && !isNaN(e.target.value)) {//如果格式正确获取dialog中的输入
+        if (e.target.value != "" && !isNaN(e.target.value)) {//如果格式正确获取dialog中的输入
             this.setState({packageID: e.target.value});
         }
     },
@@ -72,7 +72,7 @@ var Package = React.createClass({displayName: "Package",
             }
         }
         if (!this.props.isPackageIn) {//---如果是拆包,那么弹出输入包裹id的dialog
-            placeInputPackageID(this.sureButtonGetPackageID,this.getPackageIDChange);
+            placeInputPackageID(this.sureButtonGetPackageID, this.getPackageIDChange);
         }
         User.Package = this;//进入时把这个部分的引用暴露出去
 
@@ -95,26 +95,26 @@ var Package = React.createClass({displayName: "Package",
         var index = parseInt(e.target.dataset.index);
         var expresses = this.state.expresses;
         var willDelExpressID = expresses.splice(index, 1);
-        if(this.props.isPackageIn) {//如果是打包,删除的时候必须进行网络请求
-            if(User.job == 1){
-                delExpressFromPackage(this,User.recvPackageId, willDelExpressID, expresses);//打包,删除需要网络请求
-            }else {
-                delExpressFromPackage(this,this.state.packageID, willDelExpressID, expresses);//打包,删除需要网络请求
+        if (this.props.isPackageIn) {//如果是打包,删除的时候必须进行网络请求
+            if (User.job == 1) {
+                delExpressFromPackage(this, User.recvPackageId, willDelExpressID, expresses);//打包,删除需要网络请求
+            } else {
+                delExpressFromPackage(this, this.state.packageID, willDelExpressID, expresses);//打包,删除需要网络请求
             }
-        }else{
+        } else {
             this.setState({expresses: expresses});//拆包,直接去掉就可以
-            if(expresses.length ==0 ){
-                showDialog("dialog","提示","快递列表为空请点击拆包按钮完成提交",true);
+            if (expresses.length == 0) {
+                showDialog("dialog", "提示", "快递列表为空请点击拆包按钮完成提交", true);
             }
         }
     }
     ,
     handleSubmit: function () {
-        if(this.props.isPackageIn){
+        if (this.props.isPackageIn) {
             this.onCloseClick();
-        }else{
+        } else {
             //拆包网络请求,要拆的包裹id参数
-            packageOut(this.state.packageID,this.onCloseClick);
+            packageOut(this.state.packageID, this.onCloseClick);
         }
     },
     render: function () {
@@ -150,21 +150,21 @@ var Package = React.createClass({displayName: "Package",
  * @param packageId
  * @param packageSuccess
  */
-function packageOut(packageId,packageSuccess) {
+function packageOut(packageId, packageSuccess) {
     Tools.myAjax({
-        type:"get",
-        url:"/REST/Domain/openPackageByPackageId/"+packageId,
+        type: "get",
+        url: "/REST/Domain/openPackageByPackageId/" + packageId,
         success: function (data) {
             //拆包成功
-            if(data.state == "1") {
-                showDialog("dialog","恭喜","拆包成功",true,packageSuccess);
-            }else{
-                showDialog("dialog","警告","拆包出错,请重新点击拆包按钮尝试",true);
+            if (data.state == "1") {
+                showDialog("dialog", "恭喜", "拆包成功", true, packageSuccess);
+            } else {
+                showDialog("dialog", "警告", "拆包出错,请重新点击拆包按钮尝试", true);
             }
         },
         error: function (data) {
             console.error(data);
-            showDialog("dialog","错误","拆包出错,请重新点击拆包按钮尝试",true);
+            showDialog("dialog", "错误", "拆包出错,请重新点击拆包按钮尝试", true);
         }
     })
 }
@@ -176,21 +176,21 @@ function packageOut(packageId,packageSuccess) {
  * @param expressID
  * @param expresses
  */
-function delExpressFromPackage(the,packageID,expressID,expresses) {
+function delExpressFromPackage(the, packageID, expressID, expresses) {
     ///deleteFromPackage/packageId/{packageId}/expressId/{expressId}/{token}
     Tools.myAjax({
-        type:"get",
-        url:"/REST/Domain/deleteFromPackage/packageId/"+packageID+"/expressId/"+expressID,
-        success:function (data) {
-            if(data.state == "1") {
+        type: "get",
+        url: "/REST/Domain/deleteFromPackage/packageId/" + packageID + "/expressId/" + expressID,
+        success: function (data) {
+            if (data.state == "1") {
                 the.setState({expresses: expresses});
-            }else{
-                showDialog("dialog","警告","删除包裹失败,请重试",true);
+            } else {
+                showDialog("dialog", "警告", "删除包裹失败,请重试", true);
             }
         },
         error: function (data) {
             console.info(data);
-            showDialog("dialog","错误","删除包裹失败,请重试",true);
+            showDialog("dialog", "错误", "删除包裹失败,请重试", true);
         }
     })
 }
@@ -201,22 +201,22 @@ function delExpressFromPackage(the,packageID,expressID,expresses) {
  * @param packageID
  * @param expressID
  */
-function addExpressToPackage(the,packageID,expressID){
+function addExpressToPackage(the, packageID, expressID) {
     Tools.myAjax({
-        type:"get",
-        url:"/REST/Domain/loadIntoPackage/packageId/"+packageID+"/id/"+expressID+"/isPackage/0",
-        success:function (data) {
-            if(data.state == "1") {
+        type: "get",
+        url: "/REST/Domain/loadIntoPackage/packageId/" + packageID + "/id/" + expressID + "/isPackage/0",
+        success: function (data) {
+            if (data.state == "1") {
                 var expresses = the.state.expresses;
                 expresses.push(expressID);
                 the.setState({expresses: expresses});
-            }else{
-                showDialog("dialog","警告","加入包裹失败,请重试",true);
+            } else {
+                showDialog("dialog", "警告", "加入包裹失败,请重试", true);
             }
         }.bind(this),
         error: function (data) {
             console.info(data);
-            showDialog("dialog","错误","添加包裹错误,请重试",true);
+            showDialog("dialog", "错误", "添加包裹错误,请重试", true);
         }
     })
 }
@@ -233,7 +233,7 @@ function initPackage(isPackageIn) {
             createPackage(false)//创建快递员收件包裹
         }
     } else if (User.job == 2) {//---如果是分拣员,首先选择快递起点和终点站点id
-        if(isPackageIn) {
+        if (isPackageIn) {
             placeChoiceSite();//--选择后创建包裹
         }
     }
@@ -245,32 +245,36 @@ function initPackage(isPackageIn) {
 var SelectSiteDialog = React.createClass({displayName: "SelectSiteDialog",
     getInitialState: function () {
         return {
-            sendSiteID:"",
-            receiveSiteID:""
+            sendSiteID: "",
+            receiveSiteID: "",
+            isPackage: this.props.isPackage == false? false : true,
         }
     },
     sendSiteChange: function (e) {
-        this.props.getResult(e.target.value,null);
+        this.props.getResult(e.target.value, null);
     },
     receiveSiteChange: function (e) {
-        this.props.getResult(null,e.target.value);
+        this.props.getResult(null, e.target.value);
     },
     render: function () {
-        var selectStyle = {width:"50%",float:"left"};
+        var selectStyle = this.state.isPackage?{width: "50%", float: "left"}:{width:"100%"};
         return (
             React.createElement("div", null, 
                 React.createElement("select", {key: "selectsend", style: selectStyle, className: "form-control", onChange: this.sendSiteChange}, 
-                    React.createElement("option", {value: "-1"}, "请选择发出站点"), 
+                    React.createElement("option", {value: "-1"}, this.state.isPackage ? "请选择起始站点" : "请选择一个站点"), 
                     this.props.data.map(function (d, index) {
                         return React.createElement("option", {key: "option"+index, value: d.id}, d.name)
                     })
                 ), 
-                React.createElement("select", {key: "selectreceive", style: selectStyle, className: "form-control", onChange: this.receiveSiteChange}, 
-                    React.createElement("option", {value: "-1"}, "请选择终点站点"), 
-                    this.props.data.map(function (d, index) {
-                        return React.createElement("option", {key: "option"+index, value: d.id}, d.name)
-                    })
-                ), 
+                this.state.isPackage ? (
+                    React.createElement("select", {key: "selectreceive", style: selectStyle, className: "form-control", 
+                            onChange: this.receiveSiteChange}, 
+                        React.createElement("option", {value: "-1"}, "请选择终点站点"), 
+                        this.props.data.map(function (d, index) {
+                            return React.createElement("option", {key: "option"+index, value: d.id}, d.name)
+                        })
+                    )
+                ) : "", 
                 React.createElement("div", {className: "clearfix"})
             )
         );
@@ -285,34 +289,39 @@ function placeChoiceSite() {
     //返回：List<OutletsEntity>
     var sendSiteID = undefined;
     var receiveSiteID = undefined;
-    function getResult(getSendSiteID,getReceiveSiteID) {
-        if(getSendSiteID!=null) {
+
+    function getResult(getSendSiteID, getReceiveSiteID) {
+        if (getSendSiteID != null) {
             sendSiteID = getSendSiteID;
         }
-        if(getReceiveSiteID!=null) {
+        if (getReceiveSiteID != null) {
             receiveSiteID = getReceiveSiteID;
         }
     }
+
     function sureButtonClick() {
         function returnMain() {
             User.Main.onCloseClick([true]);
         }
-        if(sendSiteID == "-1" || sendSiteID == undefined || receiveSiteID=="-1" || receiveSiteID == undefined){
-            showDialog("dialog","警告","您的站点选择不正确",true,returnMain);
-        }else{
-            createPackage(true,sendSiteID,receiveSiteID);//创建分拣员包裹
+
+        if (sendSiteID == "-1" || sendSiteID == undefined || receiveSiteID == "-1" || receiveSiteID == undefined) {
+            showDialog("dialog", "警告", "您的站点选择不正确", true, returnMain);
+        } else {
+            createPackage(true, sendSiteID, receiveSiteID);//创建分拣员包裹
         }
     }
+
     Tools.myAjax({
-        type:"get",
-        url:"/REST/Misc/getAllBranch/",
+        type: "get",
+        url: "/REST/Misc/getAllBranch/",
         success: function (data) {
-            showDialog("dialog","请选择包裹收发站点",React.createElement(SelectSiteDialog, {getResult: getResult, data: data}),true,sureButtonClick);
+            showDialog("dialog", "请选择包裹收发站点", React.createElement(SelectSiteDialog, {getResult: getResult, 
+                                                                data: data}), true, sureButtonClick);
             //弹出选择框
         }.bind(this),
         error: function (data) {
             console.info(data);
-            showDialog("dialog","错误","获取中转站点信息出错,请重试");
+            showDialog("dialog", "错误", "获取中转站点信息出错,请重试");
         }
     })
 }
@@ -367,7 +376,7 @@ function createPackageAjax(fromID, toID, isSorter, isSend) {
                 } else {
                     User.recvPackageId = data.id;
                 }
-            }else if(User.job == 2){
+            } else if (User.job == 2) {
                 User.sortPakcageID = data.id;
             }
         },
@@ -418,14 +427,14 @@ function expressToPackage(expresses) {
  * 从包裹中获取快递列表
  * @param packageID
  */
-function getExpressFromPackage(packageID,getSuccess) {
+function getExpressFromPackage(packageID, getSuccess) {
     Tools.myAjax({
         type: "get",
         url: "/REST/Domain/searchExpressInPackageById/" + packageID,
         success: function (data) {
-            if(data.length == 0){
-                showDialog("dialog","提醒","包裹中没有快递",true);
-            }else{
+            if (data.length == 0) {
+                showDialog("dialog", "提醒", "包裹中没有快递", true);
+            } else {
                 getSuccess(data);
             }
         },
@@ -441,7 +450,7 @@ function getExpressFromPackage(packageID,getSuccess) {
  * @param sureButton
  * @param onChange
  */
-function placeInputPackageID(sureButton,onChange) {
+function placeInputPackageID(sureButton, onChange) {
 
     var inputStyle = {width: "100%"};
     showDialog(

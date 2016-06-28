@@ -64,9 +64,9 @@ var PackageIn = React.createClass({displayName: "PackageIn",
         return null;
     },
     onClick: function () {
-        if(User.job == 3){//如果是司机那么直接弹出司机绑定包裹弹窗
+        if (User.job == 3) {//如果是司机那么直接弹出司机绑定包裹弹窗
             driverDialog();
-        }else {
+        } else {
             this.props.packageInClick();
         }
     },
@@ -87,35 +87,38 @@ var PackageIn = React.createClass({displayName: "PackageIn",
  */
 function driverDialog() {
     var packageID;
+
     function sureButtonClick() {
-        if(packageID!=undefined && !isNaN(packageID) && packageID!=""){
+        if (packageID != undefined && !isNaN(packageID) && packageID != "") {
             //把包裹和司机绑定
             Tools.myAjax({
-                type:"get",
-                url:"/REST/Domain/setDriverPackage/employeeId/"+User.id+"/packageId/"+packageID,
+                type: "get",
+                url: "/REST/Domain/setDriverPackage/employeeId/" + User.id + "/packageId/" + packageID,
                 success: function (data) {
-                    if(data.state == "1"){
-                        showDialog("dialog","恭喜","您获取包裹成功,请上路,别忘了开启手机客户端上传路径",true);
-                    }else{
-                        showDialog("dialog","警告","获取包裹失败,请检查包裹号是否正确",true);
+                    if (data.state == "1") {
+                        showDialog("dialog", "恭喜", "您获取包裹成功,请上路,别忘了开启手机客户端上传路径", true);
+                    } else {
+                        showDialog("dialog", "警告", "获取包裹失败,请检查包裹号是否正确", true);
                     }
                 },
                 error: function (data) {
                     console.error(data);
-                    showDialog("dialog","错误","包裹绑定给司机出错,请重试",true);
+                    showDialog("dialog", "错误", "包裹绑定给司机出错,请重试", true);
                 }
             })
-        }else{
-            showDialog("diaolg","警告","包裹号不可以为空和非数字字符",true);
+        } else {
+            showDialog("diaolg", "警告", "包裹号不可以为空和非数字字符", true);
         }
     }
+
     function onChange(e) {
         packageID = e.target.value;
     }
+
     var inputStyle = {width: "100%"};
-    showDialog("dialog","提示",(
+    showDialog("dialog", "提示", (
         React.createElement("input", {onChange: onChange, style: inputStyle, placeholder: "请输入包裹ID"})
-    ),true,sureButtonClick,null,null,false);
+    ), true, sureButtonClick, null, null, false);
 }
 
 /**
@@ -145,10 +148,10 @@ var ManagerButton = React.createClass({displayName: "ManagerButton",
         addressClick: React.PropTypes.func
     },
     handleClick: function () {
-        if(User.job == 4) {
+        if (User.job == 4) {
             this.props.managerClick();
-        }else{
-            showDialog("dialog","警告","只有经理才有权限进入",true);
+        } else {
+            showDialog("dialog", "警告", "只有经理才有权限进入", true);
         }
     },
     render: function () {
@@ -186,17 +189,32 @@ var ButtonContainer = React.createClass({displayName: "ButtonContainer",
     propTypes: {
         sendExpressClick: React.PropTypes.func
     },
+    getDefaultProps: function () {
+        return {
+            child1:[],
+            child2:[],
+            child3:[],
+        }
+    },
+    componentWillReceiveProps: function () {
+        console.info("updata");
+    },
     render: function () {
         return (
             React.createElement("div", {className: "button-container"}, 
                 React.createElement("div", {key: "row1", className: "row first_button_container"}, 
-                    React.createElement(PackageIn, {key: "packagein", packageInClick: this.props.packageInClick}), 
-                    React.createElement(PackageOut, {key: "packageout", packageOutClick: this.props.packageOutClick})
+                    this.props.child1.map(function (data, index) {
+                        return data
+                    })
                 ), 
                 React.createElement("div", {key: "row2", className: "row second_button_container"}, 
-                    React.createElement(ManagerButton, {managerClick: this.props.managerClick}), 
-                    React.createElement(CheckWorkloadButton, {key: "checkworkload", onCheckWorkload: this.props.onCheckWorkload})
-                )
+                    this.props.child2.map(function (data, index) {
+                        return data
+                    })
+                ), 
+                this.props.child3.map(function (data, index) {
+                    return data
+                })
             )
         );
     }
@@ -211,13 +229,16 @@ var Main = React.createClass({displayName: "Main",
         if (child[0] == true) {
             this.setState({
                 child: [
-                    React.createElement(UserInfo, {key: "userinfo"}),
                     React.createElement(ButtonContainer, {
-                        key: "buttoncontainer", 
-                        packageInClick: this.handlePackageInClick, 
-                        packageOutClick: this.handlerPackageOutClick, 
-                        managerClick: this.handleManaberClick, 
-                        onCheckWorkload: this.onCheckWorkload}
+                        child1: [
+                            React.createElement(PackageIn, {key: "packagein", packageInClick: this.handlePackageInClick}),
+                            React.createElement(PackageOut, {key: "packageout", packageOutClick: this.handlerPackageOutClick})
+                        ], 
+                        child2: [
+                            React.createElement(ManagerButton, {key: "managerbutton", managerClick: this.handleManaberClick}),
+                            React.createElement(CheckWorkloadButton, {key: "checkworkload", onCheckWorkload: this.onCheckWorkload})
+                        ], 
+                        key: "buttoncontainer"}
                     )
                 ]
             });
@@ -236,7 +257,6 @@ var Main = React.createClass({displayName: "Main",
 
         this.setState({
             child: [
-                React.createElement(UserInfo, {key: "userinfo"}),
                 React.createElement(Package, {isPackageIn: true, onCloseClick: this.onCloseClick, key: "packagein"})
             ]
         });
@@ -249,7 +269,6 @@ var Main = React.createClass({displayName: "Main",
         }
         this.setState({
             child: [
-                React.createElement(UserInfo, {key: "userinfo"}),
                 React.createElement(Package, {key: "packageout", onCloseClick: this.onCloseClick, isPackageIn: false})
             ]
         })
@@ -262,8 +281,7 @@ var Main = React.createClass({displayName: "Main",
         }
         this.setState({
             child: [
-                React.createElement(UserInfo, {key: "userinfo"}),
-                React.createElement(Address, {onCloseClick: this.onCloseClick, key: "addressmanage"}),
+                React.createElement(ManagerComponent, {onCloseClick: this.onCloseClick, key: "managecomponent"}),
             ]
         })
     },
@@ -272,17 +290,20 @@ var Main = React.createClass({displayName: "Main",
     },
     getInitialState: function () {
         User.Main = this;
-        
+
         var init = {
             child: [
-                React.createElement(UserInfo, {key: "userinfo"}),
                 React.createElement(ButtonContainer, {
-                    key: "buttoncontainer", 
-                    packageInClick: this.handlePackageInClick, 
-                    packageOutClick: this.handlerPackageOutClick, 
-                    managerClick: this.handleManaberClick, 
-                    onCheckWorkload: this.onCheckWorkload}
-                ),
+                    child1: [
+                            React.createElement(PackageIn, {key: "packagein", packageInClick: this.handlePackageInClick}),
+                            React.createElement(PackageOut, {key: "packageout", packageOutClick: this.handlerPackageOutClick})
+                        ], 
+                    child2: [
+                            React.createElement(ManagerButton, {key: "managerbutton", managerClick: this.handleManaberClick}),
+                            React.createElement(CheckWorkloadButton, {key: "checkworkload", onCheckWorkload: this.onCheckWorkload})
+                        ], 
+                    key: "buttoncontainer"}
+                )
             ]
         };
         return init;
@@ -290,6 +311,7 @@ var Main = React.createClass({displayName: "Main",
     render: function () {
         return (
             React.createElement("div", {className: "container col-sm-6 col-md-4 main"}, 
+                React.createElement(UserInfo, {key: "userinfo"}), 
                 this.state.child, 
                 React.createElement(Footer, {onCloseClick: this.onCloseClick, key: "footer"})
             )

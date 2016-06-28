@@ -1,0 +1,63 @@
+/*蓝色的比较亮的颜色*/
+/*整体主要部件的背景颜色*/
+/*阴影颜色*/
+/*背景渐变
+@start  渐变开始颜色
+@end  结束颜色
+*/
+.send_express_button .employee_manager_button {
+  background: #ec0f0f;
+}
+.employee_manager_component {
+  width: 100%;
+  height: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 15px;
+}
+.employee_manager_component button {
+  width: 100%;
+  height: 50%;
+  background: #fb2b2b;
+  color: #FFFFFF;
+}
+.employee_manager_component button:hover {
+  background: red;
+  color: #FFFFFF;
+}
+.manager_employee_list {
+  list-style: none;
+}
+.manager_employee_list li {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.manager_employee_list li:hover {
+  background: #efefef;
+  cursor: pointer;
+}
+.manager_employee_list img {
+  float: right;
+  width: 20px;
+  height: 20px;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+  -webkit-transition: all 500ms;
+  -moz-transition: all 500ms;
+  -ms-transition: all 500ms;
+  -o-transition: all 500ms;
+  transition: all 500ms;
+}
+.manager_employee_list img:hover {
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
+  cursor: pointer;
+}

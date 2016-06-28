@@ -6,11 +6,15 @@
  */
 var NameLogin = React.createClass({displayName: "NameLogin",
     getInitialState: function () {
-        return {
-            nameText: "",
-            workType:"",
-            site:"",
+        var config = {};
+        if(this.props.isUpdate){
+            config.nameText = this.props.employee.name;
+            config.workType = this.props.employee.job;
+        }else{
+            config.nameText = "";
+            config.workType = "";
         }
+        return config;
     },
     handleNameChange: function (event) {
         var value = event.target.value;
@@ -33,10 +37,6 @@ var NameLogin = React.createClass({displayName: "NameLogin",
             this.props.handleWorkTypeChange(e.target.value);
         }
     },
-    handleSiteChange: function (e) {
-        this.setState({site:e.target.value});
-        this.props.handleSiteChange(e.target.value);
-    },
     render: function () {
         return (
             React.createElement("div", null, 
@@ -48,9 +48,7 @@ var NameLogin = React.createClass({displayName: "NameLogin",
                     React.createElement("option", {value: "2"}, "分拣员"), 
                     React.createElement("option", {value: "3"}, "司机"), 
                     React.createElement("option", {value: "4"}, "经理")
-                ), 
-                React.createElement("input", {type: "text", value: this.state.site, className: "login_name", placeholder: "站点", 
-                       onChange: this.handleSiteChange})
+                )
             )
         );
     }
@@ -60,6 +58,9 @@ var NameLogin = React.createClass({displayName: "NameLogin",
  */
 var Tel = React.createClass({displayName: "Tel",
     getInitialState: function () {
+        if(this.props.value!=undefined){
+            return {telephone:this.props.value}
+        }
         return {telephone: ""};
     },
     handleChange: function (event) {
@@ -96,6 +97,9 @@ var Tel = React.createClass({displayName: "Tel",
  */
 var Password = React.createClass({displayName: "Password",
     getInitialState: function () {
+        if(this.props.value!=undefined){
+            return {password:this.props.value}
+        }
         return {password: ""};
     },
     handleChange: function (event) {
@@ -172,13 +176,17 @@ var Login = React.createClass({displayName: "Login",
             password: this.state.password,
             name: this.state.name,
             workType:this.state.workType,
-            site:this.state.site,
+            siteID:this.props.siteID,
         };
         if (config.telephone.length != 11) {
             this.handleError("电话号码长度错误");
             return;
         }
-        if(!this.state.isLogin && (this.state.workType == "" || this.state.site == "")){
+        if(!this.state.isLogin && this.props.siteID == undefined){
+            this.handleError("请重新选择站点然后添加员工");
+            return;
+        }
+        if(!this.state.isLogin && this.state.workType == ""){
             this.handleError("请填写完整");
             return;
         }
@@ -186,12 +194,6 @@ var Login = React.createClass({displayName: "Login",
     },
     handleSubmitStart: function (event) {
         event.preventDefault();
-    },
-    handleToRegister: function () {
-        ReactDOM.render(
-            React.createElement(Login, {isLogin: "false", key: "noLogin"}),
-            document.getElementById("login_container")
-        );
     },
     handleError: function (message) {
         this.setState({errorMessage: message});
@@ -219,9 +221,6 @@ var Login = React.createClass({displayName: "Login",
     handleWorkTypeChange: function (type) {
         this.setState({workType:type});
     },
-    handleSiteChange: function (site) {
-        this.setState({site:site});
-    },
     render: function () {
         var h3Style = {textAlign: "center", width: "100%", paddingBottom: "10px"};
         var aStyle = {color: "#2aabd2"};
@@ -232,19 +231,18 @@ var Login = React.createClass({displayName: "Login",
             nameCom = undefined;
             head = "登陆";
         } else {
-            nameCom = React.createElement(NameLogin, {handleWorkTypeChange: this.handleWorkTypeChange, handleSiteChange: this.handleSiteChange, hanleChange: this.handleNameChange, onError: this.handleError});
-            head = "注册";
+            nameCom = React.createElement(NameLogin, React.__spread({},  this.props, {handleWorkTypeChange: this.handleWorkTypeChange, handleSiteChange: this.handleSiteChange, hanleChange: this.handleNameChange, onError: this.handleError}));
+            head = "管理员工";
         }
         return (
             React.createElement("form", {onSubmit: this.handleSubmitStart, method: "get", className: "login_window"}, 
                 React.createElement(CloseButton, {onClose: this.onClose}), 
                 React.createElement("h3", {style: h3Style}, head), 
-                React.createElement(Tel, {handleChange: this.handleTelChange, onError: this.handleError}), 
+                React.createElement(Tel, {handleChange: this.handleTelChange, value: this.props.isUpdate?this.props.employee.telephone:"", onError: this.handleError}), 
                 nameCom, 
-                React.createElement(Password, {handleChange: this.handlePasswordChange, onError: this.handleError}), 
+                React.createElement(Password, {handleChange: this.handlePasswordChange, value: this.props.isUpdate?this.props.employee.password:"", onError: this.handleError}), 
                 React.createElement("div", null, React.createElement("input", {type: "button", className: "login_submit", onClick: this.handleSubmitClick, defaultValue: "提交"})
                 ), 
-                React.createElement("p", null, "还没有账号?", React.createElement("a", {href: "#", onClick: this.handleToRegister, style: aStyle}, "注册新账号")), 
                 React.createElement("p", {style: errorStyle}, this.state.errorMessage)
             )
         );
@@ -293,10 +291,9 @@ function startLogin(props, config, isLogin, onSuccess) {
         Tools.myAjax({
             type: "post",
             url:url,
-            data: {telephone: config.telephone, password: config.password, name: config.name,job:config.workType,jobText:jobText,status:"1",outletsId:"1"},
+            data: {telephone: config.telephone, password: config.password, name: config.name,job:config.workType,jobText:jobText,status:"1",outletsId:config.siteID},
             success: function (data) {
                 if (data.newEmployee == 'true') {
-                    doSuccess(data);
                     showDialog("dialog", "恭喜", "注册成功", true, onSuccess);
                 }
                  else {

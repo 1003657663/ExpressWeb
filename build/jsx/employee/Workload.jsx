@@ -1,6 +1,113 @@
 /**
  * Created by songchao on 16/6/25.
  */
+
+/**
+ * 入口方法,调用显示工作量
+ * @param employeeID
+ */
+function showWorkload(packageID) {
+    if (packageID != undefined) {
+        Workload.id = packageID;
+        Workload.whichRequest = 1;
+    }
+    $(canvas).attr({width: $(canvas).width() + "px", height: $(canvas).height() + "px"});
+    setTimeout(function () {
+        ReactDOM.render(<WorkloadInputComponent />,
+            document.getElementById("workload_input_container"))
+    }, 1000);
+    draw(canvas);
+}
+
+//-----获取响应元素
+var canvas = document.getElementById("workload_canvas");
+var toast = document.getElementById("workload_toast");
+//-----数据配置存储类
+var Workload = {
+    Data: [],//数据
+    type: 0,//类型,包括1,年,2,月,3,日,4自定义日期
+    year: undefined,//年
+    month: undefined,//月
+    day: undefined,//存放当前选择日期
+    days: undefined,//存放当前需要向服务器请求的日期数
+    rectNum: 0,//存放需要在图上绘制的矩形个数
+    mouseEvent: [],//时间绑定到这里
+
+    id: User.id,//请求的id,默认是用户的id
+    whichRequest: 0,//那个组织的工足量?0,默认,个人工作量,1,营业网点工作量
+
+    width: function () {
+        return $(canvas).width();
+    },
+    height: function () {
+        return $(canvas).height();
+    },
+    offsetLeft: 40,
+    offsetTop: 40,
+    offsetRight: 40,
+    offsetBottom: 40,
+    arrowLength: 5,
+    limitY: 0,
+    unitLengthX: undefined,
+    unitLengthY: function () {
+        return (this.getYLength() - 40) / this.limitY;
+    },
+    getRectMaxH: function () {
+        return this.getYLength() - 40;
+    },
+    getX: function (x) {
+        return x + this.offsetLeft;
+    },
+    getY: function (y) {
+        return this.height() - this.offsetBottom - y;
+    },
+    getXLength: function () {
+        return this.width() - this.offsetLeft - this.offsetRight;
+    },
+    getYLength: function () {
+        return this.height() - this.offsetTop - this.offsetBottom;
+    },
+    drawLine: function (context, x1, y1, x2, y2) {
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+    },
+    setXLimit: function () {
+        //this.rectNum = this.Data.length;
+        switch (this.type) {
+            case 0:
+                Workload.unitLengthX = (Workload.getXLength() - 40) / 24;
+                break;
+            case 1:
+                Workload.unitLengthX = (Workload.getXLength() - 40) / 62;
+                break;
+            case 2:
+                Workload.unitLengthX = (Workload.getXLength() - 40) / 48;
+                break;
+            case 3:
+                if (this.rectNum != undefined) {
+                    Workload.unitLengthX = (Workload.getXLength() - 40) / (2 * this.rectNum);
+                }
+                break;
+        }
+    },
+    init: function () {
+        this.mouseEvent.length = 0;
+        this.setXLimit();
+        this.type = parseInt(this.type);
+        this.year = parseInt(this.year);
+        this.month = parseInt(this.month);
+        this.day = parseInt(this.day);
+        this.days = parseInt(this.days);
+        this.rectNum = parseInt(this.rectNum);
+
+        var dd = this.Data;
+        this.limitY = Math.max.apply(null, dd);
+    }
+};
+
+/**
+ * 工作量容器
+ */
 var WorkloadInputComponent = React.createClass({
     getInitialState: function () {
         return {
@@ -70,190 +177,126 @@ var WorkloadInputComponent = React.createClass({
 
 function loadData(type, year, month, day, toDay) {
     //type 1,year,2month,3day,4today
-    if(month<10){
-        month = "0"+month;
+    //初始化workload类中的参数
+    if (month < 10) {
+        month = "0" + month;
     }
-    if(day<10){
-        day = "0"+day;
+    if (day < 10) {
+        day = "0" + day;
     }
     var fromTime = "";
     var days = 0;
-    switch (type){
+    switch (type) {
         case 0:
             Workload.year = year;
-            fromTime = year+"-01-01";
-            days = 365;
+            fromTime = year + "-01-01";
+            Workload.days = 365;
+            Workload.rectNum = 12;
             break;
         case 1:
             Workload.month = month;
-            fromTime = year+"-"+month+"-01";
-            days = 30;
+            fromTime = year + "-" + month + "-01";
+            Workload.days = 31;
+            Workload.rectNum = 31;
             break;
         case 2:
-            fromTime = year+"-"+month+"-" +day;
-            days = 1;
+            Workload.day = day;
+            fromTime = year + "-" + month + "-" + day;
+            Workload.days = 1;
+            Workload.rectNum = 24;
             break;
         case 3:
-            fromTime = year+"-"+month+"-" +day;
-            days = toDay;
+            Workload.days = toDay;
+            Workload.rectNum = toDay;
+            fromTime = year + "-" + month + "-" + day;
             break;
     }
 
+    var url = "";
+    if (Workload.whichRequest == 0) {//0是个人工作量
+        url = "/REST/Domain/getWork/employeeId/" + Workload.id + "/starttime/" + fromTime + "/days/" + Workload.days;
+    } else if (Workload.whichRequest == 1) {//1是网点工作量
+        url = "/REST/Domain/getWorkOfOutlets/outletId/" + Workload.id + "/starttime/" + fromTime + "/days/" + Workload.days;
+    }
+
+    
     Tools.myAjax({
         type: "get",
-        url: "/REST/Domain/getWork/employeeId/"+User.id+"/starttime/"+fromTime+"/days/"+days,
+        url: url,
         success: function (data) {
             //通过时间区分工作量
-            handleData(data,type);
+            handleData(data, type);
         },
         error: function (data) {
             console.error(data);
-            showDialog("dialog","错误","获取工作量错误fromtime:"+fromTime+"day:"+days,true);
+            showDialog("dialog", "错误", "获取工作量错误fromtime:" + fromTime + "day:" + Workload.days, true);
         }
     });
 }
 
-function handleData(data,type) {
+function handleData(data, type) {
     var load = [];
-    var i=0;
-    if(type == 0){
+    var i = 0;
+    if (type == 0) {
         //统计一年中每个月的工作量
-        for(i=0;i<data.length;i++){
+        for (i = 0; i < data.length; i++) {
             var dd = data[i];
-            var month = new Date(dd.outTime).getMonth()+1;
-            if(load[month] == undefined){
+            var month = new Date(dd.outTime).getMonth() + 1;
+            if (load[month] == undefined) {
                 load[month] = 1;
-            }else {
+            } else {
                 load[month]++;
             }
         }
-        console.info(load);
-    }else if(type == 1){//月
+    } else if (type == 1) {//月
         //统计一年中每个月的工作量
-        for(i=0;i<data.length;i++){
+        for (i = 0; i < data.length; i++) {
             var dd = data[i];
             var day = new Date(dd.outTime).getDate();
-            if(load[day] == undefined){
+            if (load[day] == undefined) {
                 load[day] = 1;
-            }else {
+            } else {
                 load[day]++;
             }
         }
-        console.info(load);
-    }else if(type ==2){//日
-        for(i=0;i<data.length;i++){
+    } else if (type == 2) {//日
+        for (i = 0; i < data.length; i++) {
             var dd = data[i];
             var hour = new Date(dd.outTime).getHours();
-            if(load[hour] == undefined){
+            if (load[hour] == undefined) {
                 load[hour] = 1;
-            }else {
+            } else {
                 load[hour]++;
             }
         }
-        console.info(load);
-    }else if(type == 3){
-        for(i=0;i<data.length;i++){
+    } else if (type == 3) {
+        for (i = 0; i < data.length; i++) {
             var dd = data[i];
             var day = new Date(dd.outTime).getDate();
-            if(load[day] == undefined){
+            if (load[day] == undefined) {
                 load[day] = 1;
-            }else {
+            } else {
                 load[day]++;
             }
         }
-        console.info(load);
     }
 
     //把空值设为0
-    for(i=0;i<load.length;i++){
-        if(load[i] == undefined){
-            load[i] = 0;
+    if (type == 3) {
+        for (i = 0; i <= parseInt(Workload.day) + parseInt(Workload.days); i++) {
+            if (load[i] == undefined) {
+                load[i] = 0;
+            }
+        }
+    } else {
+        for (i = 0; i <= Workload.rectNum; i++) {
+            if (load[i] == undefined) {
+                load[i] = 0;
+            }
         }
     }
     Workload.Data = load;
     Workload.type = type;
-    draw(canvas);
-}
-
-//-----获取响应元素
-var canvas = document.getElementById("workload_canvas");
-var toast = document.getElementById("workload_toast");
-//-----数据配置存储类
-var Workload = {
-    Data: [],
-    type: 0,
-    year: undefined,
-    month: undefined,
-    day:undefined,
-    days: undefined,
-    mouseEvent: [],
-
-    width: function () {
-        return $(canvas).width();
-    },
-    height: function () {
-        return $(canvas).height();
-    },
-    offsetLeft: 40,
-    offsetTop: 40,
-    offsetRight: 40,
-    offsetBottom: 40,
-    arrowLength: 5,
-    limitY: function () {
-        var dd = this.Data;
-        return Math.max.apply(null, dd);
-    },
-    unitLengthX: undefined,
-    unitLengthY: function () {
-        return (this.getYLength() - 40) / this.limitY();
-    },
-    getRectMaxH: function () {
-        return this.getYLength() - 40;
-    },
-    getX: function (x) {
-        return x + this.offsetLeft;
-    },
-    getY: function (y) {
-        return this.height() - this.offsetBottom - y;
-    },
-    getXLength: function () {
-        return this.width() - this.offsetLeft - this.offsetRight;
-    },
-    getYLength: function () {
-        return this.height() - this.offsetTop - this.offsetBottom;
-    },
-    drawLine: function (context, x1, y1, x2, y2) {
-        context.moveTo(x1, y1);
-        context.lineTo(x2, y2);
-    },
-    setXLimit: function () {
-        this.days = this.Data.length;
-        switch (this.type) {
-            case 0:
-                Workload.unitLengthX = (Workload.getXLength() - 40) / 24;
-                break;
-            case 1:
-                Workload.unitLengthX = (Workload.getXLength() - 40) / 60;
-                break;
-            case 2:
-                if (this.days != undefined) {
-                    Workload.unitLengthX = (Workload.getXLength() - 40) / (2 * this.days);
-                }
-                break;
-        }
-    },
-    init: function () {
-        this.mouseEvent.length = 0;
-        this.setXLimit();
-    }
-};
-
-function showWorkload(employeeID) {
-    $(canvas).attr({width: $(canvas).width() + "px", height: $(canvas).height() + "px"});
-    setTimeout(function () {
-        ReactDOM.render(<WorkloadInputComponent />,
-            document.getElementById("workload_input_container"))
-    }, 1000);
     draw(canvas);
 }
 
@@ -263,7 +306,7 @@ function showWorkload(employeeID) {
 function draw(canvas) {
     var context = canvas.getContext("2d");
     context.fillStyle = "#ffffff";
-    context.fillRect(0,0,Workload.width(),Workload.height());
+    context.fillRect(0, 0, Workload.width(), Workload.height());
     context.font = "10px Georgia";
 
     lineXY(context);
@@ -275,7 +318,7 @@ function draw(canvas) {
 
 function myClearInterval() {
     //清除所有动画
-    for(var i=0;i<time.length;i++){
+    for (var i = 0; i < time.length; i++) {
         clearInterval(time[i]);
     }
     time.length = 0;
@@ -297,8 +340,8 @@ function drawCloseButton(context) {
 
 //循环每一个矩形
 function drawPic(context) {
-    for (var i = 0; i < Workload.days; i++) {
-        if(i==0){
+    for (var i = 0; i <= Workload.rectNum; i++) {
+        if (i == 0) {
             continue;
         }
         aniH(context, i, 0);
@@ -310,14 +353,14 @@ function drawPic(context) {
 //-----bug---动画进行中切换数据会出错
 var time = [];
 function aniH(context, i, hh) {
-    var geadd = Workload.limitY() / 2500;
+    var geadd = Workload.limitY / 2500;
     var getime = 10;
     var signTime = setInterval(function () {
         //通过i-1,把i==0,占用的空间去掉
-        createRect(context, Workload.getX(Workload.unitLengthX * ((i-1) * 2 + 1)), Workload.unitLengthX, hh += getime * geadd, i);
-        if (hh >= Workload.Data[i]) {
+        createRect(context, Workload.getX(Workload.unitLengthX * ((i - 1) * 2 + 1)), Workload.unitLengthX, hh += getime * geadd, i);
+        if (hh >= (Workload.type == 3 ? Workload.Data[Workload.day + i - 1] : Workload.Data[i])) {
             window.clearInterval(signTime);
-            createRect(context, Workload.getX(Workload.unitLengthX * ((i-1) * 2 + 1)), Workload.unitLengthX, hh += getime * geadd, i,true);
+            createRect(context, Workload.getX(Workload.unitLengthX * ((i - 1) * 2 + 1)), Workload.unitLengthX, hh += getime * geadd, i, true);
         }
     }, 10);
     time.push(signTime);
@@ -334,7 +377,6 @@ function lineXY(context) {
     context.fillText("工作量", Workload.getX(0), Workload.getY(Workload.getYLength()) - 5);
     context.stroke();
 
-    console.info(["工作量", Workload.getX(0), Workload.getY(Workload.getYLength()) - 5].toString());
 
     Workload.drawLine(context, Workload.getX(0), Workload.getY(0), Workload.getX(Workload.getXLength()), Workload.getY(0));
     Workload.drawLine(context, Workload.getX(Workload.getXLength()), Workload.getY(0), Workload.getX(Workload.getXLength()) - Workload.arrowLength, Workload.getY(0) - Workload.arrowLength);
@@ -344,20 +386,17 @@ function lineXY(context) {
 
     //画xy轴上的字
     //y轴
-    context.fillText(Workload.limitY()+"",Workload.getX(-20),Workload.getY(Workload.getRectMaxH()));
-    context.fillText("啦啦啦",20,80);
+    context.fillText(Workload.limitY + "", Workload.getX(-20), Workload.getY(Workload.getRectMaxH()));
+    context.fillText("啦啦啦", 20, 80);
 
     context.stroke();
 }
 
 //创建矩形类,同时添加鼠标响应事件,同时把事件响应注册到数组里
-function createRect(context, x, width, height, whichDay,isAddToEvent) {
+function createRect(context, x, width, height, whichDay, isAddToEvent) {
     //每创建一个矩形就把它画出来
     var y = height * Workload.unitLengthY();
-    if(isAddToEvent) {
-        if (whichDay == 6) {
-            console.info(1);
-        }
+    if (isAddToEvent) {
         var o = new Object();
         o.x = x;
         o.width = width;
@@ -373,7 +412,10 @@ function createRect(context, x, width, height, whichDay,isAddToEvent) {
                     toast.innerHTML = Workload.year + "-" + Workload.month + "-" + this.whichDay + " " + Workload.Data[this.whichDay] + "件";
                     break;
                 case 2:
-                    toast.innerHTML = this.whichDay + "日:" + Workload.Data[this.whichDay] + "件";
+                    toast.innerHTML = this.whichDay + "点" + Workload.Data[this.whichDay] + "件";
+                    break;
+                case 3:
+                    toast.innerHTML = this.whichDay - 1 + Workload.day + "天" + Workload.Data[this.whichDay - 1 + Workload.day] + "件";
                     break;
             }
             toast.style.display = "block";

@@ -5,7 +5,6 @@
 var Footer = React.createClass({
     onAboutClick:function () {
         var child = [
-            <UserInfo key="userinfo"/>,
             <AboutOus key="aboutous" onCloseClick={this.props.onCloseClick}/>
         ];
         this.props.onCloseClick(child);

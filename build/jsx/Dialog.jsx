@@ -75,6 +75,7 @@ var Dialog = React.createClass({
         if (this.state.closeFunction != undefined) {
             this.state.closeFunction();
         }
+        $(".modal-backdrop").remove();
     },
     submitFunction: function () {
         if (this.state.submitFunction != undefined) {
