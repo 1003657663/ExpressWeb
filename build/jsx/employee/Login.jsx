@@ -14,7 +14,7 @@ var NameLogin = React.createClass({
     },
     handleNameChange: function (event) {
         var value = event.target.value;
-        if (value.length > 6) {
+        if (value.length > 20) {
             if (this.props.onError != null) {
                 this.props.onError("姓名太长");
             }
@@ -47,6 +47,7 @@ var NameLogin = React.createClass({
                     <option value="1">快递员</option>
                     <option value="2">分拣员</option>
                     <option value="3">司机</option>
+                    <option value="4">经理</option>
                 </select>
                 <input type="text" value={this.state.site} className="login_name" placeholder="站点"
                        onChange={this.handleSiteChange}/>
@@ -161,7 +162,7 @@ var Login = React.createClass({
         }
         return Tools.extend(temp, {
             telephone: "15038290935", password: "123456", name: "",workType:"",site:"",
-            errorMessage: "", isProgress: -1
+            errorMessage: ""
         });
     },
     handleSubmitClick: function (event) {
@@ -181,11 +182,6 @@ var Login = React.createClass({
             this.handleError("请填写完整");
             return;
         }
-        setTimeout(function () {
-            if (this.state.isProgress == -1 && this.isMounted()) {
-                this.setState({isProgress: true});
-            }
-        }.bind(this), 800);
         startLogin(this, config, this.state.isLogin, this.onSuccess);
     },
     handleSubmitStart: function (event) {
@@ -231,15 +227,18 @@ var Login = React.createClass({
         var aStyle = {color: "#2aabd2"};
         var errorStyle = {color: "red"};
         var nameCom;
+        var head = "";
         if (this.state.isLogin) {
             nameCom = undefined;
+            head = "登陆";
         } else {
             nameCom = <NameLogin handleWorkTypeChange={this.handleWorkTypeChange} handleSiteChange={this.handleSiteChange} hanleChange={this.handleNameChange} onError={this.handleError}/>;
+            head = "注册";
         }
         return (
             <form onSubmit={this.handleSubmitStart} method="get" className="login_window">
                 <CloseButton onClose={this.onClose}/>
-                <h3 style={h3Style}>登陆</h3>
+                <h3 style={h3Style}>{head}</h3>
                 <Tel handleChange={this.handleTelChange} onError={this.handleError}/>
                 {nameCom}
                 <Password handleChange={this.handlePasswordChange} onError={this.handleError}/>
@@ -247,7 +246,6 @@ var Login = React.createClass({
                 </div>
                 <p>还没有账号?<a href="#" onClick={this.handleToRegister} style={aStyle}>注册新账号</a></p>
                 <p style={errorStyle}>{this.state.errorMessage}</p>
-                {this.state.isProgress == true ? <Progress/> : ""}
             </form>
         );
     }
@@ -259,10 +257,9 @@ function startLogin(props, config, isLogin, onSuccess) {
 
         Tools.myAjax({
             type: "post",
-            url, url,
+            url:url,
             data: {telephone: config.telephone, password: config.password},
             success: function (data) {
-                props.setState({isProgress: false});
                 if (data.loginstate == 'true') {
                     doSuccess(data);
                     showDialog("dialog", "恭喜", "登陆成功", true, onSuccess);
@@ -276,8 +273,6 @@ function startLogin(props, config, isLogin, onSuccess) {
                 }
             }.bind(props),
             error: function (data) {
-
-                props.setState({isProgress: false});
                 console.error(data);
                 showDialog("dialog", "警告", "登陆失败" + data.state(), true);
 
@@ -290,28 +285,25 @@ function startLogin(props, config, isLogin, onSuccess) {
             jobText = "快递员";
         }else if(config.workType == '2'){
             jobText = "分拣员";
-        }else{
+        }else if(config.workType == '3'){
             jobText = "司机";
+        }else if(config.workType == '4'){
+            jobText = "经理";
         }
         Tools.myAjax({
             type: "post",
-            url, url,
+            url:url,
             data: {telephone: config.telephone, password: config.password, name: config.name,job:config.workType,jobText:jobText,status:"1",outletsId:"1"},
             success: function (data) {
-                props.setState({isProgress: false});
                 if (data.newEmployee == 'true') {
                     doSuccess(data);
                     showDialog("dialog", "恭喜", "注册成功", true, onSuccess);
-                } /*else if (data.registerstate == 'deny') {
-                    showDialog("dialog", "警告", "手机号已经注册过,请登录");
-                } else if (data.registerstate == 'null') {
-                    showDialog("dialog", "警告", "请填写完整登陆信息", true);*/
+                }
                  else {
                     showDialog("dialog", "警告", "注册失败", true);
                 }
             }.bind(props),
             error: function (data) {
-                props.setState({isProgress: false});
                 console.error(data);
                 showDialog("dialog", "警告", "注册失败", true);
             }.bind(props)
@@ -326,11 +318,19 @@ function startLogin(props, config, isLogin, onSuccess) {
         addCookie("employee_username", name);
         addCookie("employee_token", data.token);
         addCookie("employee_isLogin", "true");
+        addCookie("employee_name",name);
         addCookie("employee_telephone", config.telephone);
         addCookie("employee_password", config.password);
         addCookie("employee_id", data.id);
+        addCookie("employee_text", data.jobText);
+        addCookie("employee_job",data.job);
+        addCookie("employee_outletsId",data.outletsId);
+        addCookie("employee_status",data.status);
 
-        User.login(name, config.telephone, config.password, data.token, data.id);
+        User.login(
+            name, config.telephone, config.password, data.token, data.id,
+            data.job,data.jobText,data.outletsId,data.status
+        );
 
     }
 }

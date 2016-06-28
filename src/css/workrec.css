@@ -43,3 +43,14 @@
   -o-border-radius: 5px;
   border-radius: 5px;
 }
+#workload_input_container {
+  position: absolute;
+  top: 16%;
+  right: 20%;
+  width: 240px;
+}
+#workload_input_container select,
+#workload_input_container input {
+  float: left;
+  width: 25%;
+}

@@ -3,8 +3,34 @@
     list-style: none;
     background: #FFFFFF;
 }
-.package_list li{
+
+.package_list_li_on{
+    -webkit-transform: translate(0, 0) !important;
+    -moz-transform: translate(0, 0) !important;
+    -ms-transform: translate(0, 0) !important;
+    -o-transform: translate(0, 0) !important;
+    transform: translate(0, 0) !important;
+}
+
+.package_list_li{
     padding: 15px;
     background: @small_dark_background;
     margin-bottom: 1px;
+    -webkit-transform: translate(-100%, 0);
+    -moz-transform: translate(-100%, 0);
+    -ms-transform: translate(-100%, 0);
+    -o-transform: translate(-100%, 0);
+    transform: translate(-100%, 0);
+
+    -webkit-transition: all 1s;
+    -moz-transition: all 1s;
+    -ms-transition: all 1s;
+    -o-transition: all 1s;
+    transition: all 1s;
+}
+
+.package_one_remove{
+    position: absolute;
+    top: 8px;
+    right: 10px;
 }

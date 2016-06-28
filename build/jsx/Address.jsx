@@ -35,6 +35,7 @@ var AddressItem = React.createClass({
     },
     render: function () {
         return (
+            
             <div className={this.state.topClass}
                  onMouseOver={this.props.isSendExpress?this.handleItemOn:""}
                  onMouseOut={this.props.isSendExpress?this.handleItemOut:""}
@@ -157,7 +158,6 @@ var Address = React.createClass({
     },
     getInitialState: function () {
         return {
-            isProgress: -1,
             receiveAddress: [],
             sendAddress: [],
             sendOK: false,
@@ -195,11 +195,6 @@ var Address = React.createClass({
         });
     },
     componentDidMount: function () {
-        setTimeout(function () {
-            if (this.state.isProgress == -1 && this.isMounted()) {
-                this.setState({isProgress: true});
-            }
-        }.bind(this), 800);
         Tools.myAjax({//send
             type: "get",
             url: "/REST/Misc/getSendAddress/customertel/" + User.telephone,
@@ -208,14 +203,12 @@ var Address = React.createClass({
                 this.setState({sendOK: true});
 
                 if (this.state.receiveOK) {
-                    this.setState({isProgress: false});
                     var child = getChild(this, this.state.receiveAddress, data);
                     this.setState({child: child});
                 }
             }.bind(this),
             error: function (data) {
-                this.setState({isProgress: false});
-            }.bind(this)
+            }
         });
         //收货
         Tools.myAjax({
@@ -226,14 +219,12 @@ var Address = React.createClass({
                 this.setState({receiveOK: true});
 
                 if (this.state.sendOK) {
-                    this.setState({isProgress: false});
                     var child = getChild(this, data, this.state.sendAddress);
                     this.setState({child: child});
                 }
             }.bind(this),
             error: function (data) {
-                this.setState({isProgress: false});
-            }.bind(this)
+            }
         });
     },
     onEditClose: function () {//编辑界面的关闭按钮点击
@@ -246,7 +237,6 @@ var Address = React.createClass({
         return (
             <div className="address_container">
                 {this.state.child}
-                {this.state.isProgress == true ? <Progress /> : ""}
             </div>
         );
     }

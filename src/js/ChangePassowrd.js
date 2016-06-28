@@ -17,9 +17,23 @@ var ChangePassword = React.createClass({displayName: "ChangePassword",
             this.setState({errorMessage:"新密码错误,请重新输入"});
             return;
         }
+        //{"changepwd":"false"}
         Tools.myAjax({
-            
-        })
+            type:"get",
+            url:"/REST/Domain/changePwd/tel/"+User.telephone+"/"+this.state.oldPassword+"/"+this.state.newPassword1,
+            success: function(data) {
+                console.info(data);
+                if(data.changepwd == "true"){
+                    showDialog("dialog","恭喜","修改密码成功",true);
+                }else{
+                    showDialog("dialog","警告","修改密码失败",true);
+                }
+            },
+            error: function (data) {
+                console.info(data);
+                showDialog("dialog","错误","修改密码失败",true);
+            }
+        });
     },
     handleBlur: function (e) {
         if(this.state.newPassword1 != this.state.newPassword2 || this.state.newPassword1==""){
@@ -44,16 +58,16 @@ var ChangePassword = React.createClass({displayName: "ChangePassword",
         var pStyle = {textAlign:"center",color:"red"};
         return (
             React.createElement("div", {className: "address_container"}, 
-                React.createElement("div", {className: "address_head"}, 
-                    React.createElement("span", null, "修改密码")
+                React.createElement("div", {key: "passwordhead", className: "address_head"}, 
+                    React.createElement("span", {key: "span"}, "修改密码")
                 ), 
 
-                React.createElement("input", {type: "password", className: "login_password", onChange: this.onChangeOld, value: this.state.oldPassword, placeholder: "请输入旧密码"}), 
-                React.createElement("input", {type: "password", className: "login_password", onChange: this.onChangeNew1, value: this.state.newPassword1, placeholder: "请输入新密码"}), 
-                React.createElement("input", {type: "password", className: "login_password", onChange: this.onChangeNew2, value: this.state.newPassword2, onBlur: this.handleBlur, placeholder: "请再次输入新密码"}), 
-                React.createElement("input", {type: "button", className: "login_submit", onClick: this.handleSubmitClick, defaultValue: "提交"}), 
-                React.createElement("p", {style: pStyle}, this.state.errorMessage), 
-                React.createElement(BeforeButton, {onCloseClick: this.onCloseClick})
+                React.createElement("input", {key: "passwordold", type: "password", className: "login_password", onChange: this.onChangeOld, value: this.state.oldPassword, placeholder: "请输入旧密码"}), 
+                React.createElement("input", {key: "passwordnew1", type: "password", className: "login_password", onChange: this.onChangeNew1, value: this.state.newPassword1, placeholder: "请输入新密码"}), 
+                React.createElement("input", {key: "passwordnew2", type: "password", className: "login_password", onChange: this.onChangeNew2, value: this.state.newPassword2, onBlur: this.handleBlur, placeholder: "请再次输入新密码"}), 
+                React.createElement("input", {key: "passwordsubmit", type: "button", className: "login_submit", onClick: this.handleSubmitClick, defaultValue: "提交"}), 
+                React.createElement("p", {key: "errormessage", style: pStyle}, this.state.errorMessage), 
+                React.createElement(BeforeButton, {key: "beforebutton", onCloseClick: this.onCloseClick})
             )
         );
     }

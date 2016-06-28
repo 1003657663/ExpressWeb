@@ -2,57 +2,82 @@
  * Created by songchao on 16/6/15.
  */
 $.support.cors = true;
+//给数组添加是否包含方法
+Array.prototype.contains = function (text) {
+    var length = this.length;
+    for(var i=0;i<length;i++){
+        if(this[i] == text){
+            return true;
+        }
+    }
+    return false;
+};
+
 var User = {
     isLogin:false,
-    name:"",
-    telephone:"",
-    password:"",
-    token:"",
-    id:"",
-    job:"",
-    jobText:"",
-    outletsId:"",
-    
+    name:null,
+    telephone:null,
+    password:null,
+    token:null,
+    id:null,
+    job:null,//1,快递员,2分拣员,3司机
+    jobText:null,
+    outletsId:null,
+    status:null,
+    recvPackageId:null,
+    sendPackageId:null,
+    sortPakcageID:null,
     
     //用户组件
-    UserInfo:"",
+    UserInfo:null,
     //Navbar
-    NavBar:"",
+    NavBar:null,
     //Main
-    Main:"",
+    Main:null,
+    //打包拆包组件
+    Package:null,
 
     cookieLogin:function () {
-        this.isLogin = JSON.parse(getCookieValue("isLogin"));
-        this.name = getCookieValue("name");
-        this.telephone = getCookieValue("telephone");
-        this.password = getCookieValue("password");
-        this.token = getCookieValue("token");
-        this.id = getCookieValue("id");
+        this.isLogin = getCookieValue("employee_isLogin") == "true"?true:false;
+        this.name = getCookieValue("employee_name");
+        
+        this.telephone = getCookieValue("employee_telephone");
+        this.password = getCookieValue("employee_password");
+        this.token = getCookieValue("employee_token");
+        this.id = getCookieValue("employee_id");
+        this.job = getCookieValue("employee_job");
+        this.jobText = getCookieValue("employee_jobText");
+        this.outletsId = getCookieValue("employee_outletsId");
+        this.status = getCookieValue("status");
     },
-    login:function (name, telephone, password, token, id) {
+    login:function (name, telephone, password, token,
+                    id,job,jobText,outletsId,status) {
         this.isLogin = true;
         this.name = name;
         this.telephone = telephone;
         this.password = password;
         this.token = token;
         this.id = id;
+        this.job = job;
+        this.jobText = jobText;
+        this.outletsId = outletsId;
+        this.status = status;
+
         this.NavBar.setState({isLogin:true});
         this.UserInfo.setState({name:name,telephone:telephone,isLogin:true});
     },
 
     logout:function () {
         this.isLogin = false;
-        this.name = "";
-        this.telephone = "";
-        this.id = "";
-        this.password = "";
-        this.token = "";
+        this.name = null;
+        this.telephone = null;
+        this.id = null;
+        this.password = null;
+        this.token = null;
         this.UserInfo.setState({isLogin: false});
-        this.NavBar.setState({name:"",telephone:"",isLogin: false});
+        this.NavBar.setState({name:null,telephone:null,isLogin: false});
     }
 };
-//初始登录
-User.cookieLogin();
 
 
 var Url = {
@@ -61,14 +86,5 @@ var Url = {
     header:"http://127.0.0.1:8080/ExTrace_Server"
 };
 
-var Test = {
-    addressList:[
-        {userName: "宋超", telephone: "12345678909", address: "河南省啦啦啦", detail: "508宿舍"},
-        {userName: "宋", telephone: "111111111111", address: "山东省", detail: "508宿舍"}
-    ],
-    historyList:[
-        {historyID:12345,historySendName:"xiaohua",historySendTime:"2016-05-08 10:52:41",historyReceiveName:"xiaoming",historyReceiveTime:"2016-02-03 15:56:12"},
-        {historyID:12345,historySendName:"lallaa",historySendTime:"2016-01-04 10:52:41",historyReceiveName:"wowowow",historyReceiveTime:"2016-05-03 11:56:12"},
-
-    ]
-}
+//初始登录
+User.cookieLogin();

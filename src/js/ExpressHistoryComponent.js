@@ -135,7 +135,6 @@ var ExpressHistotyComponent = React.createClass({displayName: "ExpressHistotyCom
     getInitialState: function () {
         return {
             addressList: [],
-            isProgress: -1,
             historyReceiveList: [],
             historySendList: [],
             child: gethistoryComponentChild(this, [], []),
@@ -143,11 +142,6 @@ var ExpressHistotyComponent = React.createClass({displayName: "ExpressHistotyCom
     },
 
     componentDidMount: function () {
-        setTimeout(function () {
-            if (this.state.isProgress == -1 && this.isMounted()) {
-                this.setState({isProgress: true});
-            }
-        }.bind(this), 800);
         //获取收件记录
         var sendOK = false;
         var receiveOk = false;
@@ -159,7 +153,6 @@ var ExpressHistotyComponent = React.createClass({displayName: "ExpressHistotyCom
                 this.state.historyReceiveList = data;
                 if (sendOK && this.isMounted()) {
                     this.setState({
-                        isProgress: false,
                         child: gethistoryComponentChild(this, this.state.historyReceiveList, this.state.historySendList)
                     });
                 }
@@ -178,7 +171,6 @@ var ExpressHistotyComponent = React.createClass({displayName: "ExpressHistotyCom
                 this.state.historySendList = data;
                 if (receiveOk && this.isMounted()) {
                     this.setState({
-                        isProgress: false,
                         child: gethistoryComponentChild(this, this.state.historyReceiveList, this.state.historySendList)
                     });
                 }
@@ -203,7 +195,6 @@ var ExpressHistotyComponent = React.createClass({displayName: "ExpressHistotyCom
         return (
             React.createElement("div", {className: "address_container"}, 
                 this.state.child, 
-                this.state.isProgress == true ? React.createElement(Progress, null) : "", 
                 React.createElement(BeforeButton, {onCloseClick: this.handleCloseClick, key: "beforebutton"})
             )
         );

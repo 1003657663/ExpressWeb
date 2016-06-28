@@ -127,3 +127,17 @@ var Progress = React.createClass({displayName: "Progress",
         );
     }
 });
+
+function showProgress() {
+    ReactDOM.render(
+        React.createElement(Progress, null),
+        document.getElementById("dialog")
+    )
+}
+
+function hideProgress() {
+    ReactDOM.render(
+        React.createElement(EmptyComponent, null),
+        document.getElementById("dialog")
+    )
+}

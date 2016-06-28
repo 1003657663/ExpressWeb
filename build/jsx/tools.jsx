@@ -61,18 +61,32 @@ var Tools = {
         }else{
             dataType = config.dataType;
         }
+
+        var RequestComplete = false;
+        setTimeout(function () {
+            if(RequestComplete == false) {
+                showProgress();
+            }
+        }, 500);
         $.ajax({
             type: type,
             url: url,
             data: type=="get"?data:JSON.stringify(data),
             dataType: dataType,
-            heanders: {
+            headers: {
                 Accept: "application/json",
-                "Content-Type": "application/x-www-form-urlencoded",//"application/json",
-                "Access-Control-Request-Method": type
+                //"Content-Type": "application/json",
             },
-            success: success,
-            error: error
+            success: function (data) {
+                hideProgress();
+                RequestComplete = true;
+                success(data);
+            },
+            error: function (data) {
+                hideProgress(data);
+                RequestComplete = true;
+                error(data);
+            }
         });
     },
     classSet: function () {

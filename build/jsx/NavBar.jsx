@@ -45,8 +45,8 @@ var SearchInput = React.createClass({
     onKeyDown: function (e) {
         if (e.which == 13) {
             this.handleClick();
+            e.preventDefault();
         }
-        e.preventDefault();
     },
     render: function () {
         return (
@@ -95,6 +95,7 @@ var LoginAndReg = React.createClass({
     handleLogout: function () {
         //注销
         User.logout();
+        User.Main.onCloseClick([true]);
     },
     render: function () {
         var chil;

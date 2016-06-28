@@ -5,6 +5,7 @@
 /**
  * 返回上一个界面的按钮
  */
+
 var BeforeButton = React.createClass({
     propTypes:{
         onCloseClick:React.PropTypes.func

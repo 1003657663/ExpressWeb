@@ -3,13 +3,16 @@
  */
 
 var dialogList = {};//存储所有的dialog的id用于关闭
-function closeAllDialog() {
-    for (var index in dialogList) {
-        $('#' + dialogList[index]).modal('hide');
-    }
-}
+/*function closeAllDialog() {
+ for (var key in dialogList) {
+ $('#' + key).modal('hide');
+ }
+ }*/
 
-function showDialog(dialogID, dialogHead, dialogContent, hasClose, closeFunction, hasSubmit, submitFunction) {
+function showDialog(dialogID, dialogHead, dialogContent, hasClose, closeFunction, hasSubmit, submitFunction, isNextClose) {
+    if (isNextClose == undefined) {
+        isNextClose = true;
+    }
     if (dialogList[dialogID] != undefined) {
         dialogList[dialogID].setState({
             dialogID: dialogID,
@@ -18,7 +21,8 @@ function showDialog(dialogID, dialogHead, dialogContent, hasClose, closeFunction
             hasClose: hasClose,
             hasSubmit: hasSubmit,
             submitFunction: submitFunction,
-            closeFunction: closeFunction
+            closeFunction: closeFunction,
+            isNextClose: isNextClose,
         });
     } else {
         ReactDOM.render(
@@ -30,6 +34,7 @@ function showDialog(dialogID, dialogHead, dialogContent, hasClose, closeFunction
                 closeFunction={closeFunction}
                 hasSubmit={hasSubmit}
                 submitFunction={submitFunction}
+                isNextClose={isNextClose}
             />, document.getElementById("dialog"));
     }
 }
@@ -46,17 +51,16 @@ var Dialog = React.createClass({
         config.dialogHead = this.props.dialogHead;
         config.dialogContent = this.props.dialogContent;
         config.hasClose = this.props.hasClose;
-        config.hasSubmit = this.props.hasSubmit;
-        /*config.submitFunction = this.props.submitFunction;
-         config.closeFunction = this.props.closeFunction;*/
         for (key in config) {
             if (config[key] == undefined) {
                 console.error("dialog 参数有空,请补全:" + key);
                 return null;
             }
         }
+        config.hasSubmit = this.props.hasSubmit;
         config.submitFunction = this.props.submitFunction;
         config.closeFunction = this.props.closeFunction;
+        config.isNextClose = this.props.isNextClose;
 
         dialogList[this.props.dialogID] = this;
         return config;
@@ -82,7 +86,8 @@ var Dialog = React.createClass({
         var SubmitButton = undefined;
         if (this.state.hasClose) {
             CloseButton =
-                <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.handleClick}>
+                <button type="button" className="btn btn-default" data-dismiss={this.state.isNextClose?"modal":""}
+                        onClick={this.handleClick}>
                     确定</button>;
         }
         if (this.state.hasSubmit) {
@@ -127,3 +132,27 @@ var Progress = React.createClass({
         );
     }
 });
+
+/**
+ * 空组件
+ */
+var EmptyComponent = React.createClass({
+    render: function () {
+        return null;
+    }
+});
+
+function showProgress() {
+    ReactDOM.render(
+        <Progress />,
+        document.getElementById("progress")
+    )
+    setTimeout(hideProgress, 3000);
+}
+
+function hideProgress() {
+    ReactDOM.render(
+        <EmptyComponent />,
+        document.getElementById("progress")
+    )
+}

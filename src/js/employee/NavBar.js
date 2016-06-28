@@ -10,31 +10,27 @@ var SearchInput = React.createClass({displayName: "SearchInput",
     },
     handleClick: function () {
         var id = this.state.value;
-        if (id.length < 11 || isNaN(id)) {
-            showDialog("dialog", "警告", "快递单号错误", true);
+        if(User.Package == null){
+            showDialog("dialog","警告","请在打包或者拆包界面使用搜索框",true);
             return;
         }
-        //----这里执行网络操作---ajax---
-        Tools.myAjax({
+
+        User.Package.addExpress(id);
+        //----这里执行网络操作---ajax---检查快递是否在数据库中
+        /*Tools.myAjax({
             type: "get",
-            url: "/REST/Domain/getExpresslogisticsInfosByExpressId/" + this.state.value,
+            url: "/Domain/checkExpressIfExisit/"+id,
             success: function (data) {
-                if (data.length == 0) {
-                    showDialog("dialog", "警告", "您查的快递号还没有物流信息",true);
-                    return;
+                if(data.state == "1") {
+
+                }else{
+                    showDialog("dialog","警告","这个快递号不是一个已经存在的快递,请检查是否正确",true);
                 }
-                                                      
-                User.Main.setState({
-                    child: [
-                        React.createElement(UserInfo, {key: "userinfo"}),
-                        React.createElement(SearchResult, {key: "searchresult", searchID: id, searchResult: data}),
-                    ]
-                });
             },
             error: function (data) {
-                console.error(data);
+                showDialog("dialog","错误","检查快递存在性出错,请重试",true);
             }
-        })
+        })*/
     },
     handleInputChange: function (event) {
         var inputValue = event.target.value;
@@ -45,14 +41,14 @@ var SearchInput = React.createClass({displayName: "SearchInput",
     onKeyDown: function (e) {
         if (e.which == 13) {
             this.handleClick();
+            e.preventDefault();
         }
-        e.preventDefault();
     },
     render: function () {
         return (
             React.createElement("form", {className: "searchForm", method: "get", onKeyPress: this.onKeyDown}, 
                 React.createElement("span", null, 
-                    React.createElement("img", {src: "../images/address/add_on.png", width: "15px", height: "15px", className: "searchIcon", 
+                    React.createElement("img", {src: "../images/address/add_on.png", width: "15px", height: "15px", className: "em_searchIcon", 
                          onClick: this.handleClick})
                 ), 
                 React.createElement("input", {type: "text", className: "searchInput", value: this.state.value, placeholder: "搜索", 
@@ -95,6 +91,7 @@ var LoginAndReg = React.createClass({displayName: "LoginAndReg",
     handleLogout: function () {
         //注销
         User.logout();
+        User.Main.onCloseClick([true]);
     },
     render: function () {
         var chil;

@@ -10,7 +10,7 @@ var NameLogin = React.createClass({
     },
     handleNameChange: function (event) {
         var value = event.target.value;
-        if (value.length > 6) {
+        if (value.length > 20) {
             if (this.props.onError != null) {
                 this.props.onError("姓名太长");
             }
@@ -136,7 +136,7 @@ var Login = React.createClass({
         }
         return Tools.extend(temp, {
             telephone: "15038290935", password: "123456", name: "",
-            errorMessage: "", isProgress: -1
+            errorMessage: ""
         });
     },
     handleSubmitClick: function (event) {
@@ -150,11 +150,14 @@ var Login = React.createClass({
             this.handleError("电话号码长度错误");
             return;
         }
-        setTimeout(function () {
-            if (this.state.isProgress == -1 && this.isMounted()) {
-                this.setState({isProgress: true});
-            }
-        }.bind(this), 800);
+        if(config.name == ""){
+            this.handleError("必须输入名字");
+            return;
+        }
+        if(config.password <6){
+            this.handleError("密码长度不对");
+            return;
+        }
         startLogin(this, config, this.state.isLogin, this.onSuccess);
     },
     handleSubmitStart: function (event) {
@@ -194,15 +197,17 @@ var Login = React.createClass({
         var aStyle = {color: "#2aabd2"};
         var errorStyle = {color: "red"};
         var nameCom;
+        var head = "登陆";
         if (this.state.isLogin) {
             nameCom = undefined;
         } else {
             nameCom = <NameLogin hanleChange={this.handleNameChange} onError={this.handleError}/>;
+            head = "注册";
         }
         return (
             <form onSubmit={this.handleSubmitStart} method="get" className="login_window">
                 <CloseButton onClose={this.onClose}/>
-                <h3 style={h3Style}>登陆</h3>
+                <h3 style={h3Style}>{head}</h3>
                 <Tel handleChange={this.handleTelChange} onError={this.handleError}/>
                 {nameCom}
                 <Password handleChange={this.handlePasswordChange} onError={this.handleError}/>
@@ -210,7 +215,6 @@ var Login = React.createClass({
                 </div>
                 <p>还没有账号?<a href="#" onClick={this.handleToRegister} style={aStyle}>注册新账号</a></p>
                 <p style={errorStyle}>{this.state.errorMessage}</p>
-                {this.state.isProgress == true ? <Progress/> : ""}
             </form>
         );
     }
@@ -222,17 +226,10 @@ function startLogin(props, config, isLogin, onSuccess) {
 
         Tools.myAjax({
             type: "post",
-            url, url,
+            url:url,
             data: {telephone: config.telephone, password: config.password},
             success: function (data) {
-                props.setState({isProgress: false});
                 if (data.loginstate == 'true') {
-                    /*addCookie("username", data.name);
-                    addCookie("token", data.token);
-                    addCookie("isLogin", "true");
-                    addCookie("tel", config.telephone);
-                    addCookie("id", data.id);*/
-
                     doSuccess(data);
                     showDialog("dialog", "恭喜", "登陆成功", true, onSuccess);
 
@@ -245,8 +242,6 @@ function startLogin(props, config, isLogin, onSuccess) {
                 }
             }.bind(props),
             error: function (data) {
-
-                props.setState({isProgress: false});
                 console.error(data);
                 showDialog("dialog", "警告", "登陆失败" + data.state(), true);
 
@@ -257,10 +252,9 @@ function startLogin(props, config, isLogin, onSuccess) {
 
         Tools.myAjax({
             type: "post",
-            url, url,
+            url:url,
             data: {telephone: config.telephone, password: config.password, name: config.name},
             success: function (data) {
-                props.setState({isProgress: false});
                 if (data.registerstate == 'true') {
                     doSuccess(data);
                     showDialog("dialog", "恭喜", "注册成功", true, onSuccess);
@@ -273,7 +267,6 @@ function startLogin(props, config, isLogin, onSuccess) {
                 }
             }.bind(props),
             error: function (data) {
-                props.setState({isProgress: false});
                 console.error(data);
                 showDialog("dialog", "警告", "注册失败", true);
             }.bind(props)

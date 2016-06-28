@@ -4,6 +4,7 @@
 var map = new BMap.Map("baidu_map");
 var point = new BMap.Point(116.404, 39.915);  // 创建点坐标
 map.centerAndZoom(point, 15);
+map.enableScrollWheelZoom(true);
 var Map = {
     ak: "ynKpoQfTW9Zc93p4T4vWafHI6nFpIubO",
     serviceID: "115498"
@@ -50,8 +51,8 @@ function startShow(points) {
     //-------------向百度地图中添加标记
     var startIcon = new BMap.Icon("../images/map/start.png", new BMap.Size(25, 25));
     var endIcon = new BMap.Icon("../images/map/end.png", new BMap.Size(25, 25));
-    var startMarkPoint = new BMap.Point(points[0][0], points[0][1]);
-    var endMarkPoint = new BMap.Point(points[points.length - 1][0], points[points.length - 1][1]);
+    var startMarkPoint = new BMap.Point(points[0][1], points[0][0]);
+    var endMarkPoint = new BMap.Point(points[points.length - 1][1], points[points.length - 1][0]);
     var startmarker = new BMap.Marker(startMarkPoint, {icon: startIcon});
     var endmarker = new BMap.Marker(endMarkPoint, {icon: endIcon});
     map.addOverlay(startmarker);

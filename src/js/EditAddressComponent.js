@@ -62,7 +62,7 @@ var EditAddressComponent = React.createClass({displayName: "EditAddressComponent
             });
         }
     },
-    handleProvinceChange(event){
+    handleProvinceChange:function(event){
         var value = event.target.value;
         this.setState({provinceValue: value});
         //获取城市
@@ -81,7 +81,7 @@ var EditAddressComponent = React.createClass({displayName: "EditAddressComponent
             }.bind(this)
         })
     },
-    handleCityChange(event){
+    handleCityChange:function(event){
         var value = event.target.value;
         this.setState({cityValue: value});
         //获取区域
@@ -100,7 +100,7 @@ var EditAddressComponent = React.createClass({displayName: "EditAddressComponent
             }.bind(this)
         })
     },
-    handleAreaChange(event){
+    handleAreaChange:function(event){
         var value = event.target.value;
         this.setState({areaValue: value});
     },
